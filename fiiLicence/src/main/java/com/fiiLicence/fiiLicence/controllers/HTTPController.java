@@ -1,6 +1,7 @@
 package com.fiiLicence.fiiLicence.controllers;
 
-import com.fiiLicence.fiiLicence.models.*;
+import com.fiiLicence.fiiLicence.models.requests.*;
+import com.fiiLicence.fiiLicence.models.response.*;
 import com.fiiLicence.fiiLicence.services.DatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -178,7 +179,7 @@ public class HTTPController {
         return new ResponseEntity<List<IdResponse>>(databaseService.getProfsWithoutCommitte(token), HttpStatus.OK);
     }
 
-    //12 ---------------------------------------- /RECORDLICENCE -------------------------------------------------
+    //12 ---------------------------------------- /MOVEPROFTOCOMMITTE -------------------------------------------------
     //@CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/moveProfToCommitte", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> moveProfToCommitte(@RequestHeader("Authorization") String token, @RequestBody MoveProfRequest request) {
@@ -208,6 +209,77 @@ public class HTTPController {
         return new ResponseEntity<List<StudentResponse>>(databaseService.getEvaluateStudentsByCommitte(request.id), HttpStatus.OK);
     }
 
+    //14 ---------------------------------------- /PROFNOTE -------------------------------------------------
+    //@CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/profNote", method = RequestMethod.POST)
+    public ResponseEntity<RegistrationResponse> profNote(@RequestHeader("Authorization") String token, @RequestBody ProfNoteRequest request) {
+
+        boolean result = databaseService.profNote(request.idProf,request.idStudent,request.grade);
+
+        RegistrationResponse response = new RegistrationResponse();
+        response.response = result;
+
+        System.out.println("------ /profNote - " + request.idProf +" " + request.idStudent+" "+request.grade + " - " + result + " ------");
+        return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
+    }
+
+    //15 ---------------------------------------- /GETPROFSWITHOUTCOMMITTE -------------------------------------------------
+    //@CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/getStudentGuided", method = RequestMethod.POST)
+    public ResponseEntity<List<StudentGuidedListResponse>> getStudentGuided(@RequestHeader("Authorization") String token,@RequestBody IdResponse request) {
+
+        List<StudentGuidedListResponse> response = databaseService.getStudentGuided(request.id);
+
+        if (response == null) {
+            System.out.println("------ /getStudentGuided - " + token + " - NO MATCH ------");
+            return new ResponseEntity<List<StudentGuidedListResponse>>(HttpStatus.NO_CONTENT);
+        }
+
+        System.out.println("------ /getStudentGuided - " + token + " ------");
+        return new ResponseEntity<List<StudentGuidedListResponse>>(databaseService.getStudentGuided(request.id), HttpStatus.OK);
+    }
+
+    //16 ---------------------------------------- /INSERTSTUDENTTOLISTPROF -------------------------------------------------
+    //@CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/insertStudentToListProf", method = RequestMethod.POST)
+    public ResponseEntity<RegistrationResponse> insertStudentToListProf(@RequestHeader("Authorization") String token, @RequestBody InsertStudentRequest request) {
+
+        boolean result = databaseService.insertStudentToListProf(request.idProf,request.numeStudent,request.prenumeStudent);
+
+        RegistrationResponse response = new RegistrationResponse();
+        response.response = result;
+
+        System.out.println("------ /insertStudentToListProf - " + request.idProf +" " + request.numeStudent+" "+request.prenumeStudent + " - " + result + " ------");
+        return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
+    }
+
+    //17 ---------------------------------------- /DELETESTUDENTTOLISTPROF -------------------------------------------------
+    //@CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/deleteStudentToListProf", method = RequestMethod.POST)
+    public ResponseEntity<RegistrationResponse> deleteStudentToListProf(@RequestHeader("Authorization") String token, @RequestBody DeleteStudentRequest request) {
+
+        boolean result = databaseService.deleteStudentToListProf(request.idProf,request.idStudent);
+
+        RegistrationResponse response = new RegistrationResponse();
+        response.response = result;
+
+        System.out.println("------ /deleteStudentToListProf - " + request.idProf +" " + request.idStudent + " - " + result + " ------");
+        return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
+    }
+
+    //18 ---------------------------------------- /MODIFYDATE -------------------------------------------------
+    //@CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/modifyDate", method = RequestMethod.POST)
+    public ResponseEntity<RegistrationResponse> modifyDate(@RequestHeader("Authorization") String token, @RequestBody ModifyDateRequest request) {
+
+        boolean result = databaseService.modifyDate(request.idCommitte,request.date);
+
+        RegistrationResponse response = new RegistrationResponse();
+        response.response = result;
+
+        System.out.println("------ /modifyDate - " + request.idCommitte +" " + request.date + " - " + result + " ------");
+        return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
+    }
 
 
 }

@@ -1,7 +1,7 @@
 package com.fiiLicence.fiiLicence.services;
 
 
-import com.fiiLicence.fiiLicence.models.*;
+import com.fiiLicence.fiiLicence.models.response.*;
 
 import java.util.List;
 
