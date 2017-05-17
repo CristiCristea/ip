@@ -58,6 +58,6 @@ public class Main{
         List<CommitteListResponse> comRespList = dataBaseService.getCommitteList("1");
         System.out.println(comRespList.size());
         for (CommitteListResponse c : comRespList)
-            System.out.println(c.id + " " + c.numeComisie + " "  + c.dataExaminare);
+            System.out.println(c.getId() + " " + c.getNumeComisie() + " "  + c.getDataExaminare());
     }
 }

@@ -9,15 +9,16 @@ import java.util.List;
 
 
 @Service
-public class DatabaseServiceImpl implements DatabaseService{
+public class DatabaseServiceImpl implements DatabaseService {
     private BD bd;
-    public DatabaseServiceImpl(){
-         this.bd = new BD();
-        if(bd.isConnected()){
+
+    public DatabaseServiceImpl() {
+        this.bd = new BD();
+        if (bd.isConnected()) {
             System.out.println("================================");
             System.out.println("  CONNECTED TO ORACLE DATABASE  ");
             System.out.println("================================");
-        } else{
+        } else {
             System.out.println("================================");
             System.out.println("  ERROR TO ORACLE DATABASE  ");
             System.out.println("================================");
@@ -30,7 +31,7 @@ public class DatabaseServiceImpl implements DatabaseService{
             byte[] array = md.digest(md5.getBytes());
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < array.length; ++i) {
-                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
             }
             return sb.toString();
         } catch (java.security.NoSuchAlgorithmException e) {
@@ -38,10 +39,11 @@ public class DatabaseServiceImpl implements DatabaseService{
         return null;
     }
 
-    private String getHas(String email, String password){
+    private String getHas(String email, String password) {
         email.concat(password);
         return MD5(email);
     }
+
     /*1.
     Descriere: Metoda utilizata pentru intregistrare.
     Input:  - adresa_email (String)
@@ -49,8 +51,8 @@ public class DatabaseServiceImpl implements DatabaseService{
     Output: - result (Boolean) (true - daca email-ul de inregistare a fost trimis, false - in caz de orice alta eroare)*/
     @Override
     public boolean validateRegistration(String email, String password) {
-        int result = bd.inregistrare_stud(email,password);
-        if(result != 0)
+        int result = bd.inregistrare_stud(email, password);
+        if (result != 0)
             return false;
         else
             return true;
@@ -65,7 +67,7 @@ public class DatabaseServiceImpl implements DatabaseService{
     public boolean confirmRegistration(String confirmToken) {
         int result = bd.verificare(confirmToken);
         System.out.println(result);
-        if( result != 0)
+        if (result != 0)
             return false;
         else
             return true;
@@ -80,9 +82,9 @@ public class DatabaseServiceImpl implements DatabaseService{
                                     fi utilizat pentru apelarea in mod securizat a celorlalte metode, daca nu un empty string)*/
     @Override
     public String login(String email, String password) {
-        String username = email.substring(0,email.indexOf('@'));
-        int result = bd.login(username,password);
-        return getHas(email,password);
+        String username = email.substring(0, email.indexOf('@'));
+        int result = bd.login(username, password);
+        return getHas(email, password);
     }
 
     /*4.
@@ -165,9 +167,9 @@ public class DatabaseServiceImpl implements DatabaseService{
 
         for (IntrareComisii c : listaComisii) {
             CommitteListResponse comListRes = new CommitteListResponse();
-            comListRes.id = c.getId();
-            comListRes.numeComisie = "Comisie "+ comListRes.id;
-            comListRes.dataExaminare = c.getDataEvaluare();
+            comListRes.setId(c.getId());
+            comListRes.setNumeComisie("Comisie " + comListRes.getId());
+            comListRes.setDataExaminare(c.getDataEvaluare());
             committeeList.add(comListRes);
         }
 
@@ -200,7 +202,7 @@ public class DatabaseServiceImpl implements DatabaseService{
         List<IdResponse> result = new ArrayList<IdResponse>();
         for (Integer i : idProfiComisie) {
             IdResponse idRes = new IdResponse();
-            idRes.id = idProfiComisie.get(i - 1);
+            idRes.setId(idProfiComisie.get(i - 1));
             result.add(idRes);
         }
         return result;
@@ -218,7 +220,7 @@ public class DatabaseServiceImpl implements DatabaseService{
 
         for (IntrareProfesori p : profsWithoutCommitteeList) {
             IdResponse idRes = new IdResponse();
-            idRes.id = p.getId();
+            idRes.setId(p.getId());
             profsWithoutCommitteeIdList.add(idRes);
         }
         return profsWithoutCommitteeIdList;
@@ -298,13 +300,12 @@ public class DatabaseServiceImpl implements DatabaseService{
     }
 
     @Override
-    public void finalize(){
+    public void finalize() {
         try {
             System.out.println("================================");
             System.out.println("  DISCONNECTED FROM ORACLE DB   ");
             System.out.println("================================");
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Error shutting down database!");
         }
     }
