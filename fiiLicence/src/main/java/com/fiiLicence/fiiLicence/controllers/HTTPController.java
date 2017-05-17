@@ -75,7 +75,7 @@ public class HTTPController {
 
     //5 ---------------------------------------- /PROFESORLIST -------------------------------------------------
     //@CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(value = "/profesorlist", method = RequestMethod.POST)
+    @RequestMapping(value = "/profesorlist", method = RequestMethod.GET)
     public ResponseEntity<List<ProfListResponse>> profesorlist(@RequestHeader("Authorization") String token) {
 
         List<ProfListResponse> response = databaseService.getProfList(token);
