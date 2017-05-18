@@ -2,6 +2,7 @@ package com.fiiLicence.fiiLicence.services.bd;
 
 import com.fiiLicence.fiiLicence.models.response.CommitteListResponse;
 import com.fiiLicence.fiiLicence.models.response.IdResponse;
+import com.fiiLicence.fiiLicence.models.response.ProfListResponse;
 import com.fiiLicence.fiiLicence.services.DatabaseServiceImpl;
 
 import java.io.PrintStream;
@@ -9,16 +10,16 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main{
-    public static void main( String [] args ){
+public class Main {
+    public static void main(String[] args) {
         //aici ai exemplu cum functioneaza Bd ...
         BD bd = new BD();
-        System.out.println(bd.isConnected());
+       /* System.out.println(bd.isConnected());
 
         System.out.println(bd.inregistrare_stud("marian.gica@info.uaic.ro","parola"));
-        System.out.println(bd.verificare("03624201201451881688"));
-
-        bd.login("Admin","Root");
+        System.out.println(bd.verificare("24686548788778504316"));
+*/
+   /*     bd.login("Admin","Root");
         System.out.println(bd.isLoged());
         AccessBD access = bd.getAccess();
         System.out.println(access.getTip());
@@ -27,6 +28,8 @@ public class Main{
 
         List<IntrareProfesori> profesori = new ArrayList<IntrareProfesori>();
         profesori = accessStudent.selectProfesori();
+        System.out.println(profesori);*/
+/*
 
         IntrareProfesori profesor = new IntrareProfesori();
         profesor.setId(100);
@@ -38,7 +41,6 @@ public class Main{
         System.out.println(result);
 
 
-        System.out.println(profesori);
 
 
         //-------------------------------------verificare getProfsWithoutCommitte ----------------
@@ -59,5 +61,33 @@ public class Main{
         System.out.println(comRespList.size());
         for (CommitteListResponse c : comRespList)
             System.out.println(c.getId() + " " + c.getNumeComisie() + " "  + c.getDataExaminare());
+
+        //date
+        System.out.println("Logare: "+bd.login("Admin", "Root"));
+
+       bd.setTokenByIdCont("marian.gica@info.uaic.ro","test");
+       // bd.setTokenByIdCont(4,"30ed807e4c78b937222ca5938ec65278");
+*/
+
+        List<ProfListResponse> profList = new ArrayList<ProfListResponse>();
+        List<IntrareProfesori> profesori = new ArrayList<IntrareProfesori>();
+        boolean verifyToken = true;
+        if (verifyToken == true) {
+            bd.login("Admin", "Root");
+            AccessBD access = bd.getAccess();
+            profesori = access.selectProfesori();
+            for (IntrareProfesori profesor : profesori) {
+                ProfListResponse profesorList = new ProfListResponse();
+                profesorList.setId(profesor.getId());
+                profesorList.setNumeProf(profesor.getNume());
+                profesorList.setPrenumeProf(profesor.getPrenume());
+                profesorList.setEmailProf(profesor.getNume() + '.' + profesor.getPrenume() + "@info.uaic.ro");
+                profesorList.setIdComisie(profesor.getIdComisie());
+                profList.add(profesorList);
+            }
+        }
+        System.out.println(profList);
     }
+
+
 }

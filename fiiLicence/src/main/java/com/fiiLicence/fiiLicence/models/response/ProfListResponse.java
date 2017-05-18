@@ -1,6 +1,4 @@
 package com.fiiLicence.fiiLicence.models.response;
-
-
 public class ProfListResponse {
     private int id;
     private String numeProf;
@@ -46,5 +44,10 @@ public class ProfListResponse {
 
     public void setIdComisie(int idComisie) {
         this.idComisie = idComisie;
+    }
+
+    @Override
+    public String toString() {
+        return "ana are mere";
     }
 }

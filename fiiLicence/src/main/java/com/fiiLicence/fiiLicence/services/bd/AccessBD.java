@@ -31,7 +31,7 @@ public class AccessBD {
         this.idCont = idCont;
     }
 
-    public int getIdCont(int idCont) {
+    public int getIdCont() {
         return idCont;
     }
 
@@ -94,5 +94,25 @@ public class AccessBD {
             return null;
         }
     }
-
+    public List<IntrareProfesori> selectProfesori() {
+        List<IntrareProfesori> rezultat = new ArrayList<IntrareProfesori>();
+        try {
+            Statement statement = conexiune.createStatement();
+            ResultSet result = statement.executeQuery("Select * from profesori");
+            while (result.next()) {
+                IntrareProfesori intrare = new IntrareProfesori();
+                intrare.setId(result.getInt(1));
+                intrare.setIdCont(result.getInt(2));
+                intrare.setNume(result.getString(3));
+                intrare.setPrenume(result.getString(4));
+                intrare.setGradDidactic(result.getString(5));
+                intrare.setFunctieComisie(result.getString(6));
+                rezultat.add(intrare);
+            }
+            return rezultat;
+        } catch (Exception e) {
+            System.out.println("Exceptie la selectProfesori :" + e.getMessage());
+            return null;
+        }
+    }
 }

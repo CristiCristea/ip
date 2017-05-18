@@ -25,23 +25,14 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
     }
 
-    private String MD5(String md5) {
-        try {
-            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
-            byte[] array = md.digest(md5.getBytes());
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < array.length; ++i) {
-                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
-            }
-            return sb.toString();
-        } catch (java.security.NoSuchAlgorithmException e) {
-        }
-        return null;
-    }
-
-    private String getHas(String email, String password) {
-        email.concat(password);
-        return MD5(email);
+    public boolean verifyToken(String token) {
+        BD database = new BD();
+        IntrareConturi cont = new IntrareConturi();
+        bd.login("Admin", "Root");
+        cont = database.getContByToken(token);
+        if (cont != null)
+            return true;
+        return false;
     }
 
     /*1.
@@ -82,9 +73,15 @@ public class DatabaseServiceImpl implements DatabaseService {
                                     fi utilizat pentru apelarea in mod securizat a celorlalte metode, daca nu un empty string)*/
     @Override
     public String login(String email, String password) {
+        String token = "";
         String username = email.substring(0, email.indexOf('@'));
+        IntrareConturi idCont = new IntrareConturi();
         int result = bd.login(username, password);
-        return getHas(email, password);
+        if (result == 0) {
+            token = bd.getHas(email, password);
+            bd.setTokenByIdCont(email, token);
+        }
+        return token;
     }
 
     /*4.
@@ -97,8 +94,17 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public UserinfoResponse getUserInfo(String token) {
         UserinfoResponse output = new UserinfoResponse();
-
-        return null;
+        IntrareConturi cont = new IntrareConturi();
+        boolean verifyToken = verifyToken(token);
+        if (verifyToken == true) {
+            cont = bd.getContByToken(token);
+            output.setNume(cont.getUsername().substring(0, cont.getUsername().indexOf('.')));
+            output.setPrenume(cont.getUsername().substring(cont.getUsername().indexOf('.') + 1, cont.getUsername().length()));
+            output.setEmail(cont.getEmail());
+            output.setTip(cont.getTipUtilizator());
+            return output;
+        } else
+            return null;
     }
 
     /*5.
@@ -108,8 +114,26 @@ public class DatabaseServiceImpl implements DatabaseService {
                 (-1 pe id_comisie daca acesta este neasignat unei comisii)*/
     @Override
     public List<ProfListResponse> getProfList(String token) {
+        List<ProfListResponse> profList = new ArrayList<ProfListResponse>();
+        List<IntrareProfesori> profesori = new ArrayList<IntrareProfesori>();
+        boolean verifyToken = verifyToken(token);
 
-        return null;
+        if (verifyToken == true) {
+            bd.login("Admin", "Root");
+            AccessBD access = bd.getAccess();
+            profesori = access.selectProfesori();
+            for (IntrareProfesori profesor : profesori) {
+                ProfListResponse profesorList = new ProfListResponse();
+                profesorList.setId(profesor.getId());
+                profesorList.setNumeProf(profesor.getNume());
+                profesorList.setPrenumeProf(profesor.getPrenume());
+                profesorList.setEmailProf(profesor.getNume() + '.' + profesor.getPrenume() + "@info.uaic.ro");
+                profesorList.setIdComisie(profesor.getIdComisie());
+                profList.add(profesorList);
+            }
+            return profList;
+        } else
+            return null;
     }
 
     /*6.
