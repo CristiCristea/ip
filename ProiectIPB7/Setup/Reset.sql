@@ -9,9 +9,10 @@ CREATE TABLE CONTURI (
 	 EMAIL    VARCHAR2(50),
 	 TIP_UTILIZATOR VARCHAR2(20),
          Status Integer,
-	 Cod_Activare VARCHAR(20)
+	 Cod_Activare VARCHAR(20),
+   Token        VARCHAR(50)
 );
-INSERT INTO CONTURI  VALUES(1,'Admin','Root','Admin','Admin',1,'0');
+INSERT INTO CONTURI  VALUES(1,'Admin','Root','Admin','Admin',1,'0','0');
 
 
 DROP   SEQUENCE STUDENTI_SEQ;
@@ -127,8 +128,8 @@ CREATE TABLE DETALII_LICENTE (
 
 
 
-INSERT INTO CONTURI  VALUES(CONTURI_SEQ.NEXTVAL,'jimmy.jimmy','jimmy','jimmy.jimmy@info.uaic.ro','Student',1,'fsdagfsdg');
-INSERT INTO CONTURI  VALUES(CONTURI_SEQ.NEXTVAL,'grigory.grigory','grigory','grigory.grygory@info.uaic.ro','Student',0,'safasfasf');
+INSERT INTO CONTURI  VALUES(CONTURI_SEQ.NEXTVAL,'jimmy.jimmy','jimmy','jimmy.jimmy@info.uaic.ro','Student',1,'fsdagfsdg','0');
+INSERT INTO CONTURI  VALUES(CONTURI_SEQ.NEXTVAL,'grigory.grigory','grigory','grigory.grygory@info.uaic.ro','Student',0,'safasfasf','0');
 
 INSERT INTO STUDENTI VALUES(STUDENTI_SEQ.NEXTVAL,2,'nr_matricol_jimmy','jimmy','jimmy',1,1);
 INSERT INTO STUDENTI VALUES(STUDENTI_SEQ.NEXTVAL,3,'nr_matricol_grigory','grigory','grigory',1,1);
@@ -190,5 +191,7 @@ INSERT INTO PROFESORI(ID,NUME,PRENUME,GRAD_DIDACTIC) VALUES(37,'TRANDABAT','DIAN
 INSERT INTO PROFESORI(ID,NUME,PRENUME,GRAD_DIDACTIC) VALUES(38,'VARLAN','COSMIN','Lect. Dr.');
 INSERT INTO PROFESORI(ID,NUME,PRENUME,GRAD_DIDACTIC) VALUES(39,'VIDRASCU','CRISTIAN','Lect. Dr.');
 INSERT INTO PROFESORI(ID,NUME,PRENUME,GRAD_DIDACTIC) VALUES(40,'VITCU','ANCA','Conf. Dr.');
+INSERT INTO PROFESORI(ID,NUME,PRENUME,GRAD_DIDACTIC) VALUES(41,'VITCU','ANCA','Conf. Dr.');
+
 
 commit;
