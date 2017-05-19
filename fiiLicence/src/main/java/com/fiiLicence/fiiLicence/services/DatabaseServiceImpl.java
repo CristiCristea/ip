@@ -145,8 +145,30 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     Output: - result (Boolean) (true - daca totul s-a desfasurat cu succes, false - altfel)*/
     @Override
-    public boolean recordLicence(String nameOfLicence, int id_profesor, String descriptionOfLicence) {
-        return false;
+    public boolean recordLicence(String token, String nameOfLicence, int idProfesor, String descriptionOfLicence) {
+        IntrareConturi student = new IntrareConturi();
+        AccessAdminBD accessAdminBD = (AccessAdminBD) bd.getAccess();
+        IntrareLicente licenta = new IntrareLicente();
+        List<IntrareLicente> licente = accessAdminBD.selectLicente();
+
+        student = bd.getContByToken(token);
+        if (!student.getTipUtilizator().equals("Student"))
+            return false;
+
+        for (IntrareLicente licence : licente) {
+            if (licence.getIdStudent() == student.getId())
+                return false;
+        }
+
+        licenta.setId(0);
+        licenta.setTitlu(nameOfLicence);
+        licenta.setIdProfesor(idProfesor);
+        licenta.setTipLucrare(descriptionOfLicence);
+        licenta.setIdStudent(student.getId());
+        if (accessAdminBD.insertLicenta(licenta) == 0)
+            return true;
+        else
+            return false;
     }
 
     /*7.
@@ -155,7 +177,9 @@ public class DatabaseServiceImpl implements DatabaseService {
     Output: - valoare_nota (Integer) (-1 daca nota nu exista)*/
     @Override
     public GradeResponse getStudentGrade(int idStudent) {
-        return null;
+        GradeResponse grade = new GradeResponse();
+        grade.setGrade(10);
+        return grade;
     }
 
     /*8.
@@ -165,7 +189,27 @@ public class DatabaseServiceImpl implements DatabaseService {
               structurile 1-10, daca numar_pagina = 2 se returneaza structurile 11-20, etc)*/
     @Override
     public List<StundetListPageResponse> getClientListPage(int pagenumber, int pagesize) {
-        return null;
+        List<StundetListPageResponse> list = new ArrayList<StundetListPageResponse>(); // return list
+        List<IntrareStudenti> studenti = new ArrayList<IntrareStudenti>(); // select all students list
+        GradeResponse grade; // to get grade for each student
+        AccessAdminBD accessAdminBD = (AccessAdminBD) bd.getAccess();
+
+        studenti = accessAdminBD.selectStudenti(); // select all student
+
+        //get students from page pagenaumber
+        for (int index = (pagenumber - 1) * pagesize, size = studenti.size(); index < pagenumber * pagesize && index < size; index++) {
+            IntrareStudenti student = new IntrareStudenti();
+            StundetListPageResponse result = new StundetListPageResponse();
+            student = studenti.get(index);
+            grade = getStudentGrade(student.getId());
+
+            result.setNumeStudent(student.getNume());
+            result.setPrenumeStudent(student.getPrenume());
+            result.setNotaFinala(grade.getGrade());
+
+            list.add(result);
+        }
+        return list;
     }
 
     /*9.

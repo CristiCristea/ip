@@ -59,7 +59,7 @@ public class HTTPController {
 
     //4 ---------------------------------------- /USERINFO -------------------------------------------------
     //@CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(value = "/userinfo", method = RequestMethod.POST)
+    @RequestMapping(value = "/userinfo", method = RequestMethod.GET)
     public ResponseEntity<UserinfoResponse> getUserInfo(@RequestHeader("Authorization") String token) {
 
         UserinfoResponse response = databaseService.getUserInfo(token);
@@ -94,7 +94,7 @@ public class HTTPController {
     @RequestMapping(value = "/recordlicence", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> recordLicence(@RequestHeader("Authorization") String token, @RequestBody LicenceRequest request) {
 
-        boolean result = databaseService.recordLicence(request.getNameOfLicence(), request.getIdProfesor(), request.getDescriptionOfLicence());
+        boolean result = databaseService.recordLicence(token,request.getNameOfLicence(), request.getIdProfesor(), request.getDescriptionOfLicence());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
@@ -114,25 +114,25 @@ public class HTTPController {
         return new ResponseEntity<GradeResponse>(result, HttpStatus.OK);
     }
 
-    //8 ---------------------------------------- /ClientListPageRequest -------------------------------------------------
+    //8 ---------------------------------------- /ClientListPage -------------------------------------------------
     //@CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(value = "/profesorlist", method = RequestMethod.POST)
-    public ResponseEntity<List<StundetListPageResponse>> profesorlist(@RequestHeader("Authorization") String token,@RequestBody ClientListPageRequest request) {
+    @RequestMapping(value = "/clientListPage", method = RequestMethod.POST)
+    public ResponseEntity<List<StundetListPageResponse>> clientListPage(@RequestHeader("Authorization") String token,@RequestBody ClientListPageRequest request) {
 
         List<StundetListPageResponse> response = databaseService.getClientListPage(request.getPagenumber(),request.getPagesize());
 
         if (response == null) {
-            System.out.println("------ /profesorlist - " + token + " - NO MATCH ------");
+            System.out.println("------ /clientListPage - " + token + " - NO MATCH ------");
             return new ResponseEntity<List<StundetListPageResponse>>(HttpStatus.NO_CONTENT);
         }
 
-        System.out.println("------ /profesorlist - " + token + " ------");
+        System.out.println("------ /clientListPage - " + token + " ------");
         return new ResponseEntity<List<StundetListPageResponse>>(databaseService.getClientListPage(request.getPagenumber(),request.getPagesize()), HttpStatus.OK);
     }
 
     //9 ---------------------------------------- /GETCOMMITTELIST -------------------------------------------------
     //@CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(value = "/getCommitteList", method = RequestMethod.POST)
+    @RequestMapping(value = "/getCommitteList", method = RequestMethod.GET)
     public ResponseEntity<List<CommitteListResponse>> getCommitteList(@RequestHeader("Authorization") String token) {
 
         List<CommitteListResponse> response = databaseService.getCommitteList(token);
@@ -148,7 +148,7 @@ public class HTTPController {
 
     //10 ---------------------------------------- /GETPROFSFROMCOMMITTE -------------------------------------------------
     //@CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(value = "/getProfsFromCommitte", method = RequestMethod.POST)
+    @RequestMapping(value = "/getProfsFromCommitte", method = RequestMethod.GET)
     public ResponseEntity<List<IdResponse>> getProfsFromCommitte(@RequestHeader("Authorization") String token,@RequestBody IdResponse request) {
 
         List<IdResponse> response = databaseService.getProfsFromCommitte(request.getId());
@@ -165,7 +165,7 @@ public class HTTPController {
 
     //11 ---------------------------------------- /GETPROFSWITHOUTCOMMITTE -------------------------------------------------
     //@CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(value = "/getProfsWithoutCommitte", method = RequestMethod.POST)
+    @RequestMapping(value = "/getProfsWithoutCommitte", method = RequestMethod.GET)
     public ResponseEntity<List<IdResponse>> getProfsWithoutCommitte(@RequestHeader("Authorization") String token) {
 
         List<IdResponse> response = databaseService.getProfsWithoutCommitte(token);

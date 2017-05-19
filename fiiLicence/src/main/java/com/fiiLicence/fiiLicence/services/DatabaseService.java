@@ -18,7 +18,7 @@ public interface DatabaseService {
     //5
     List<ProfListResponse> getProfList(String token);
     //6
-    boolean recordLicence(String nameOfLicence, int idProfesor, String descriptionOfLicence);
+    boolean recordLicence(String token,String nameOfLicence, int idProfesor, String descriptionOfLicence);
     //7
     GradeResponse getStudentGrade(int idStudent);
     //8

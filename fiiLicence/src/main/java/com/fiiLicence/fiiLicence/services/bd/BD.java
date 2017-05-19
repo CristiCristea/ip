@@ -209,7 +209,7 @@ public class BD {
     public int setTokenByIdCont(String email, String token) {
         try {
             Statement stmt = conexiune.createStatement();
-            ResultSet rs = stmt.executeQuery("Select Count(*) from conturi where email= '" + email+"'");
+            ResultSet rs = stmt.executeQuery("Select Count(*) from conturi where email= '" + email + "'");
             rs.next();
             if (rs.getInt(1) == 0) {
                 System.out.println("Intrare Inexistenta");
@@ -217,7 +217,7 @@ public class BD {
             }
 
             Statement statement = conexiune.createStatement();
-            statement.executeUpdate("UPDATE CONTURI SET Token = '" + token + "' Where email='" + email+"'");
+            statement.executeUpdate("UPDATE CONTURI SET Token = '" + token + "' Where email='" + email + "'");
             return 0;
         } catch (Exception e) {
             System.out.println("Exceptie la setTokenByIdCont: " + e.getMessage());
@@ -335,7 +335,34 @@ public class BD {
         email.concat(password);
         return MD5(email);
     }
+// de implementat
+    public int getNotaStudent(int idStudent) {
+        int grade;
+        IntrareDetaliiLicente intrare = new IntrareDetaliiLicente();
+        try {
 
+            Statement statement = conexiune.createStatement();
+            ResultSet result = statement.executeQuery("Select * from detalii_licente");
+            intrare.setId(result.getInt(1));
+            intrare.setIdComisie(result.getInt(2));
+            intrare.setNota1Oral(result.getInt(3));
+            intrare.setNota1Proiect(result.getInt(4));
+            intrare.setNota2Oral(result.getInt(5));
+            intrare.setNota2Proiect(result.getInt(6));
+            intrare.setNota3Oral(result.getInt(7));
+            intrare.setNota3Proiect(result.getInt(8));
+            intrare.setNota4Oral(result.getInt(9));
+            intrare.setNota4Proiect(result.getInt(10));
+            intrare.setNota5Oral(result.getInt(11));
+            intrare.setNota5Proiect(result.getInt(12));
+            intrare.setDataOraSustinerii(result.getTimestamp(13));
+        } catch (Exception e) {
+            System.out.println("Exceptie la selectDetaliiLicente: " + e.getMessage());
+        }
+
+
+        return 0;
+    }
 
 
     //15.functie : luam toti studentii in functie de un profesor

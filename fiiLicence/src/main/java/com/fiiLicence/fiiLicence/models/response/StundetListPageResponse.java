@@ -4,7 +4,7 @@ package com.fiiLicence.fiiLicence.models.response;
 public class StundetListPageResponse {
     private String numeStudent;
     private String prenumeStudent;
-    private int notaFinala;
+    private double notaFinala;
 
     public String getNumeStudent() {
         return numeStudent;
@@ -22,11 +22,11 @@ public class StundetListPageResponse {
         this.prenumeStudent = prenumeStudent;
     }
 
-    public int getNotaFinala() {
+    public double getNotaFinala() {
         return notaFinala;
     }
 
-    public void setNotaFinala(int notaFinala) {
+    public void setNotaFinala(double notaFinala) {
         this.notaFinala = notaFinala;
     }
 }

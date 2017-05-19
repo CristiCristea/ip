@@ -2,13 +2,15 @@ package com.fiiLicence.fiiLicence.models.response;
 
 
 public class GradeResponse {
-    private int grade;
-
-    public int getGrade() {
+    public double getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(double grade) {
         this.grade = grade;
     }
+
+    private double grade;
+
+
 }
