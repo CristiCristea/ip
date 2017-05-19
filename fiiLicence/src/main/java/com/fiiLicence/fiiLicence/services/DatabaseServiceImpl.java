@@ -35,6 +35,43 @@ public class DatabaseServiceImpl implements DatabaseService {
         return false;
     }
 
+
+    public boolean verifyIfCommitteExists(int idCommitte, String token) {
+        List<CommitteListResponse> committeeList = getCommitteList(token);
+        List<Integer> committeIdList = new ArrayList<Integer>();
+
+        for (CommitteListResponse c : committeeList) {
+            committeIdList.add(c.getId());
+        }
+        if (committeIdList.contains(idCommitte)) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+
+    public boolean verifyIfProfesorExists(int idProfesor, String token) {
+        List<ProfListResponse> profsList = getProfList(token);
+        System.out.println("-------------ceva---------");
+        System.out.println(profsList);
+        System.out.println("-------------ceva---------");
+        List<Integer> profsIdList = new ArrayList<Integer>();
+
+        for (ProfListResponse p : profsList) {
+            profsIdList.add(p.getId());
+        }
+
+        if (profsIdList.contains(idProfesor)) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+
     /*1.
     Descriere: Metoda utilizata pentru intregistrare.
     Input:  - adresa_email (String)
@@ -296,13 +333,112 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     /*12.
     Descriere: Metoda ce va muta un profesor din orice comisie ar fi
-    (s-au daca nu este asignat unei comisii) in comisia specificata.
+    (sau daca nu este asignat unei comisii) in comisia specificata.
     Input:  - id_prof (Integer)
             - id_comisie (Integer)
     Output: - result (true - daca profesorul a fost mutat, false - din orice alt motiv)*/
     @Override
-    public boolean moveProfToCommitte(int idProf, int idCommitte) {
-        return false;
+    public boolean moveProfToCommitte(String token, int idProf, int idCommitte) {
+
+        if (!(verifyIfCommitteExists(idCommitte, token) || verifyIfProfesorExists(idProf, token))) {
+            return false;
+        }
+        BD test = new BD();
+        test.login("lacra.lacra", "lacra");
+        AccessBD accessSecretar = test.getAccess();
+
+        IntrareComisii comisieNoua = accessSecretar.getCommitteeById(idCommitte);
+        IntrareComisii comisieActuala = accessSecretar.getCommitteByProf(idProf);
+        if (comisieNoua.getIdProfSef() != 0 && comisieNoua.getIdProf2() != 0 && comisieNoua.getIdProf3() != 0) {  // pt dizertatie +comisie.getIdProf4()!=0
+            return false;
+        } else {
+
+            if (comisieNoua.getIdProfSef() == 0) {
+                comisieNoua.setIdProfSef(idProf);
+                accessSecretar.updateComisie(comisieNoua);
+
+                if (comisieActuala != null) {
+                    if (comisieActuala.getIdProf2() == idProf) {
+                        comisieActuala.setIdProf2(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    } else if (comisieActuala.getIdProf3() == idProf) {
+                        comisieActuala.setIdProf3(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    } else if (comisieActuala.getIdProfSef() == idProf) {
+                        comisieActuala.setIdProfSef(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    }
+
+                }
+
+                return true;
+
+            } else if (comisieNoua.getIdProfSef() == 0) {
+                comisieNoua.setIdProfSef(idProf);
+                accessSecretar.updateComisie(comisieNoua);
+
+
+                if (comisieActuala != null) {
+                    if (comisieActuala.getIdProf2() == idProf) {
+                        comisieActuala.setIdProf2(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    } else if (comisieActuala.getIdProf3() == idProf) {
+                        comisieActuala.setIdProf3(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    } else if (comisieActuala.getIdProfSef() == idProf) {
+                        comisieActuala.setIdProfSef(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    }
+
+                }
+
+
+                return true;
+            } else if (comisieNoua.getIdProf2() == 0) {
+                comisieNoua.setIdProf2(idProf);
+                accessSecretar.updateComisie(comisieNoua);
+
+
+                if (comisieActuala != null) {
+                    if (comisieActuala.getIdProf2() == idProf) {
+                        comisieActuala.setIdProf2(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    } else if (comisieActuala.getIdProf3() == idProf) {
+                        comisieActuala.setIdProf3(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    } else if (comisieActuala.getIdProfSef() == idProf) {
+                        comisieActuala.setIdProfSef(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    }
+
+                }
+
+
+                return true;
+            } else if (comisieNoua.getIdProf3() == 0) {
+                comisieNoua.setIdProf3(idProf);
+                accessSecretar.updateComisie(comisieNoua);
+
+
+                if (comisieActuala != null) {
+                    if (comisieActuala.getIdProf2() == idProf) {
+                        comisieActuala.setIdProf2(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    } else if (comisieActuala.getIdProf3() == idProf) {
+                        comisieActuala.setIdProf3(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    } else if (comisieActuala.getIdProfSef() == idProf) {
+                        comisieActuala.setIdProfSef(0);
+                        accessSecretar.updateComisie(comisieActuala);
+                    }
+
+                }
+
+                return true;
+            }
+            // pentru dizertatie verificare pt prof4
+            return false;
+        }
     }
 
     /*13.
@@ -311,7 +447,18 @@ public class DatabaseServiceImpl implements DatabaseService {
     Output: - Lista de studenti ce trebuie evaluati de forma: { int id_stud; String nume_stud; String prenume_stud; }   */
     @Override
     public List<StudentResponse> getEvaluateStudentsByCommitte(int idCommitte) {
-        return null;
+        List<IntrareStudenti> listaStudenti = bd.getAccess().getStudentsByCommitte(idCommitte);
+        List<StudentResponse> listaResposeStudenti = new ArrayList<StudentResponse>();
+
+        for (IntrareStudenti s : listaStudenti) {
+            StudentResponse studResp = new StudentResponse();
+            studResp.setIdStudent(s.getId());
+            studResp.setNumeStudent(s.getNume());
+            studResp.setPrenumeStudent(s.getPrenume());
+            listaResposeStudenti.add(studResp);
+        }
+
+        return listaResposeStudenti;
     }
 
     /*14.
@@ -321,7 +468,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             - valoare_nota (Integer)
     Output: - result (true - daca nota a fost trecuta, false - din orice alt motiv)*/
     @Override
-    public boolean profNote(int idProf, int idStudent, int grade) {
+    public boolean profNote(int idProf, int idStudent, int gradeOral, int gradeProiect) {
         return false;
     }
 

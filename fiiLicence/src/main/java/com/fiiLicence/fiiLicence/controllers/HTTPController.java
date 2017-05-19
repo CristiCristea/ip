@@ -184,7 +184,7 @@ public class HTTPController {
     @RequestMapping(value = "/moveProfToCommitte", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> moveProfToCommitte(@RequestHeader("Authorization") String token, @RequestBody MoveProfRequest request) {
 
-        boolean result = databaseService.moveProfToCommitte(request.getIdProf(),request.getIdCommitte());
+        boolean result = databaseService.moveProfToCommitte(token,request.getIdProf(),request.getIdCommitte());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
@@ -214,12 +214,12 @@ public class HTTPController {
     @RequestMapping(value = "/profNote", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> profNote(@RequestHeader("Authorization") String token, @RequestBody ProfNoteRequest request) {
 
-        boolean result = databaseService.profNote(request.getIdProf(),request.getIdStudent(),request.getGrade());
+        boolean result = databaseService.profNote(request.getIdProf(),request.getIdStudent(),request.getGradeOral(),request.getGradeProiect());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
 
-        System.out.println("------ /profNote - " + request.getIdProf() +" " + request.getIdStudent()+" "+request.getGrade() + " - " + result + " ------");
+        System.out.println("------ /profNote - " + request.getIdProf() +" " + request.getIdStudent()+" "+request.getGradeOral()+" "+request.getGradeProiect() + " - " + result + " ------");
         return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
     }
 

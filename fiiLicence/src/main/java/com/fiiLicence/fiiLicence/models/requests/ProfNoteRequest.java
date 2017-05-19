@@ -3,7 +3,8 @@ package com.fiiLicence.fiiLicence.models.requests;
 public class ProfNoteRequest {
     private int idProf;
     private int idStudent;
-    private int grade;
+    private int gradeOral;
+    private int gradeProiect;
 
     public int getIdProf() {
         return idProf;
@@ -21,11 +22,19 @@ public class ProfNoteRequest {
         this.idStudent = idStudent;
     }
 
-    public int getGrade() {
-        return grade;
+    public int getGradeOral() {
+        return gradeOral;
     }
 
-    public void setGrade(int grade) {
-        this.grade = grade;
+    public void setGradeOral(int gradeOral) {
+        this.gradeOral = gradeOral;
+    }
+
+    public int getGradeProiect() {
+        return gradeProiect;
+    }
+
+    public void setGradeProiect(int gradeProiect) {
+        this.gradeProiect = gradeProiect;
     }
 }
