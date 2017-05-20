@@ -148,7 +148,7 @@ public class HTTPController {
 
     //10 ---------------------------------------- /GETPROFSFROMCOMMITTE -------------------------------------------------
     //@CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping(value = "/getProfsFromCommitte", method = RequestMethod.GET)
+    @RequestMapping(value = "/getProfsFromCommitte", method = RequestMethod.POST)
     public ResponseEntity<List<IdResponse>> getProfsFromCommitte(@RequestHeader("Authorization") String token,@RequestBody IdResponse request) {
 
         List<IdResponse> response = databaseService.getProfsFromCommitte(request.getId());
@@ -223,7 +223,7 @@ public class HTTPController {
         return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
     }
 
-    //15 ---------------------------------------- /GETPROFSWITHOUTCOMMITTE -------------------------------------------------
+    //15 ---------------------------------------- /GETSTUDENTGUIDEDBYPROF -------------------------------------------------
     //@CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/getStudentGuided", method = RequestMethod.POST)
     public ResponseEntity<List<StudentGuidedListResponse>> getStudentGuided(@RequestHeader("Authorization") String token,@RequestBody IdResponse request) {
@@ -272,12 +272,12 @@ public class HTTPController {
     @RequestMapping(value = "/modifyDate", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> modifyDate(@RequestHeader("Authorization") String token, @RequestBody ModifyDateRequest request) {
 
-        boolean result = databaseService.modifyDate(request.getIdCommitte(),request.getDate());
+        boolean result = databaseService.modifyDate(request.getIdCommitte(),request.getBeginDate(),request.getEndDate());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
 
-        System.out.println("------ /modifyDate - " + request.getIdCommitte() +" " + request.getDate() + " - " + result + " ------");
+        System.out.println("------ /modifyDate - " + request.getIdCommitte() +" " + request.getBeginDate() +" "+request.getEndDate() + " - " + result + " ------");
         return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
     }
 

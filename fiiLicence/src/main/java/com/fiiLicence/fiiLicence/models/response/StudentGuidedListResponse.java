@@ -1,76 +1,112 @@
 package com.fiiLicence.fiiLicence.models.response;
 
 public class StudentGuidedListResponse {
-    private int id_stud;
-    private String nume_stud;
-    private String prenume_stud;
-    private int nota_finala;
-    private int nota1;
-    private int nota2;
-    private int nota3;
-    private int nota4;
+    private int idStudent;
+    private String numeStudent;
+    private String prenumStudent;
+    private double notaFinala;
+    private int nota1oral;
+    private int nota2oral;
+    private int nota3oral;
+    private int nota4oral;
+    private int nota1project;
+    private int nota2project;
+    private int nota3project;
+    private int nota4project;
 
-    public int getId_stud() {
-        return id_stud;
+    public int getIdStudent() {
+        return idStudent;
     }
 
-    public void setId_stud(int id_stud) {
-        this.id_stud = id_stud;
+    public void setIdStudent(int idStudent) {
+        this.idStudent = idStudent;
     }
 
-    public String getNume_stud() {
-        return nume_stud;
+    public String getNumeStudent() {
+        return numeStudent;
     }
 
-    public void setNume_stud(String nume_stud) {
-        this.nume_stud = nume_stud;
+    public void setNumeStudent(String numeStudent) {
+        this.numeStudent = numeStudent;
     }
 
-    public String getPrenume_stud() {
-        return prenume_stud;
+    public String getPrenumStudent() {
+        return prenumStudent;
     }
 
-    public void setPrenume_stud(String prenume_stud) {
-        this.prenume_stud = prenume_stud;
+    public void setPrenumStudent(String prenumStudent) {
+        this.prenumStudent = prenumStudent;
     }
 
-    public int getNota_finala() {
-        return nota_finala;
+    public double getNotaFinala() {
+        return notaFinala;
     }
 
-    public void setNota_finala(int nota_finala) {
-        this.nota_finala = nota_finala;
+    public void setNotaFinala(double notaFinala) {
+        this.notaFinala = notaFinala;
     }
 
-    public int getNota1() {
-        return nota1;
+    public int getNota1oral() {
+        return nota1oral;
     }
 
-    public void setNota1(int nota1) {
-        this.nota1 = nota1;
+    public void setNota1oral(int nota1oral) {
+        this.nota1oral = nota1oral;
     }
 
-    public int getNota2() {
-        return nota2;
+    public int getNota2oral() {
+        return nota2oral;
     }
 
-    public void setNota2(int nota2) {
-        this.nota2 = nota2;
+    public void setNota2oral(int nota2oral) {
+        this.nota2oral = nota2oral;
     }
 
-    public int getNota3() {
-        return nota3;
+    public int getNota3oral() {
+        return nota3oral;
     }
 
-    public void setNota3(int nota3) {
-        this.nota3 = nota3;
+    public void setNota3oral(int nota3oral) {
+        this.nota3oral = nota3oral;
     }
 
-    public int getNota4() {
-        return nota4;
+    public int getNota4oral() {
+        return nota4oral;
     }
 
-    public void setNota4(int nota4) {
-        this.nota4 = nota4;
+    public void setNota4oral(int nota4oral) {
+        this.nota4oral = nota4oral;
+    }
+
+    public int getNota1project() {
+        return nota1project;
+    }
+
+    public void setNota1project(int nota1project) {
+        this.nota1project = nota1project;
+    }
+
+    public int getNota2project() {
+        return nota2project;
+    }
+
+    public void setNota2project(int nota2project) {
+        this.nota2project = nota2project;
+    }
+
+    public int getNota3project() {
+        return nota3project;
+    }
+
+    public void setNota3project(int nota3project) {
+        this.nota3project = nota3project;
+    }
+
+    public int getNota4project() {
+        return nota4project;
+    }
+
+    public void setNota4project(int nota4project) {
+        this.nota4project = nota4project;
     }
 }

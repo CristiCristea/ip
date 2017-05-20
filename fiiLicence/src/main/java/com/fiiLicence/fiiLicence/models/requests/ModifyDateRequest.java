@@ -2,7 +2,8 @@ package com.fiiLicence.fiiLicence.models.requests;
 
 public class ModifyDateRequest {
     private int idCommitte;
-    private String date;
+    private  String beginDate;
+    private  String endDate;;
 
     public int getIdCommitte() {
         return idCommitte;
@@ -12,11 +13,19 @@ public class ModifyDateRequest {
         this.idCommitte = idCommitte;
     }
 
-    public String getDate() {
-        return date;
+    public String getBeginDate() {
+        return beginDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

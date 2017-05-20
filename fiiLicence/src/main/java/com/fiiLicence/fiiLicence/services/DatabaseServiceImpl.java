@@ -183,13 +183,18 @@ public class DatabaseServiceImpl implements DatabaseService {
     Output: - result (Boolean) (true - daca totul s-a desfasurat cu succes, false - altfel)*/
     @Override
     public boolean recordLicence(String token, String nameOfLicence, int idProfesor, String descriptionOfLicence) {
-        IntrareConturi student = new IntrareConturi();
+        int idCont;
+        IntrareConturi cont = new IntrareConturi();
+        IntrareStudenti student = new IntrareStudenti();
         AccessAdminBD accessAdminBD = (AccessAdminBD) bd.getAccess();
         IntrareLicente licenta = new IntrareLicente();
         List<IntrareLicente> licente = accessAdminBD.selectLicente();
 
-        student = bd.getContByToken(token);
-        if (!student.getTipUtilizator().equals("Student"))
+        cont = bd.getContByToken(token);
+        idCont = cont.getId();
+        student = bd.selectStudentByIdCont(idCont);
+
+        if (!cont.getTipUtilizator().equals("Student"))
             return false;
 
         for (IntrareLicente licence : licente) {
@@ -202,6 +207,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         licenta.setIdProfesor(idProfesor);
         licenta.setTipLucrare(descriptionOfLicence);
         licenta.setIdStudent(student.getId());
+
         if (accessAdminBD.insertLicenta(licenta) == 0)
             return true;
         else
@@ -491,7 +497,8 @@ public class DatabaseServiceImpl implements DatabaseService {
     Output: - result (Boolean) (true - daca studentul a fost adauga, false - orice alt motiv)*/
     @Override
     public boolean insertStudentToListProf(int idProf, String numeStudent, String prenumeStudent) {
-        return false;
+        BD b = new BD();
+        return b.addStudent(idProf, numeStudent, prenumeStudent);
     }
 
     /*17.
@@ -501,7 +508,8 @@ public class DatabaseServiceImpl implements DatabaseService {
     Output: - result (Boolean) (true - daca studentul a fost eliminat din lista, false - orice alt motiv)*/
     @Override
     public boolean deleteStudentToListProf(int idProf, int idStudent) {
-        return false;
+        BD b = new BD();
+        return b.removeStudent(idProf, idStudent);
     }
 
     /*18.
@@ -510,8 +518,10 @@ public class DatabaseServiceImpl implements DatabaseService {
             - data_examinare (String) (forma data: 'DD-MM-YYYY')
     Output: - result (Boolean) (true - daca data a fost modificata, false - orice alt motiv)*/
     @Override
-    public boolean modifyDate(int idCommitte, String date) {
-        return false;
+    public boolean modifyDate(int idCommitte,String beginDate,String endDate) {
+
+        BD b = new BD();
+        return b.editExaminationDate(idCommitte, beginDate, endDate);
     }
 
     @Override

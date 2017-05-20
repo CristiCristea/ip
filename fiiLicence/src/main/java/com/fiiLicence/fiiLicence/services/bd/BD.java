@@ -1,5 +1,7 @@
 package com.fiiLicence.fiiLicence.services.bd;
 
+import com.fiiLicence.fiiLicence.models.response.StudentGuidedListResponse;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -335,7 +337,8 @@ public class BD {
         email.concat(password);
         return MD5(email);
     }
-// de implementat
+
+    // de implementat
     public int getNotaStudent(int idStudent) {
         int grade;
         IntrareDetaliiLicente intrare = new IntrareDetaliiLicente();
@@ -343,6 +346,7 @@ public class BD {
 
             Statement statement = conexiune.createStatement();
             ResultSet result = statement.executeQuery("Select * from detalii_licente");
+
             intrare.setId(result.getInt(1));
             intrare.setIdComisie(result.getInt(2));
             intrare.setNota1Oral(result.getInt(3));
@@ -364,11 +368,37 @@ public class BD {
         return 0;
     }
 
+    public IntrareStudenti selectStudentByIdCont(int idCont) {
+        String apel = " Select * from studenti where id_cont = ? ";
+        try {
+            PreparedStatement statement = conexiune.prepareStatement(apel);
+            statement.setInt(1, idCont);
+            ResultSet result = statement.executeQuery();
+            IntrareStudenti intrare = new IntrareStudenti();
+
+
+            while (result.next()) {
+                intrare.setId(result.getInt(1));
+                intrare.setIdCont(result.getInt(2));
+                intrare.setNrMatricol(result.getString(3));
+                intrare.setNume(result.getString(4));
+                intrare.setPrenume(result.getString(5));
+                intrare.setId_comisie(result.getInt(6));
+                intrare.setIdSesiune(result.getInt(7));
+
+            }
+            return intrare;
+        } catch (Exception e) {
+            System.out.println("Exceptie la selectStudenti:" + e.getMessage());
+            return null;
+        }
+    }
+
 
     //15.functie : luam toti studentii in functie de un profesor
 
-    public List<IntrareStudenti> getStudentsOfATeacher(int idTeacher) {
-        List<IntrareStudenti> result_return = new ArrayList<>();
+    public List<StudentGuidedListResponse> getStudentsOfATeacher(int idTeacher) {
+        List<StudentGuidedListResponse> result_return = new ArrayList<>();
         String apel = "select distinct st.id,st.nume,st.prenume,d.NOTA_1_ORAL,d.NOTA_2_ORAL,d.NOTA_3_ORAL,d.NOTA_4_ORAL_DIZERTATIE,d.NOTA_1_proiect,d.NOTA_2_proiect,d.NOTA_3_proiect,d.NOTA_4_PROIECT_DIZERTATIE  from detalii_licente d join comisii c on d.id_comisie=c.id join evaluari e on e.id_comisie=c.id join sesiuni s on s.id=e.id_sesiune join studenti st on s.id=st.id_sesiune join profesori p on p.ID_COMISIE=c.id where p.id= ?";
 
         try {
@@ -378,23 +408,30 @@ public class BD {
             ResultSet result = statement.executeQuery();
             System.out.println("ceao marocanii " + result.getFetchSize());
             while (result.next()) { //something wrong i do, but i don't know what :(
-                System.out.println("ceao marocanii");
-                IntrareStudenti student = new IntrareStudenti();
+                int nrProjectMarks = 4;
+                int nrOralMarks = 4;
+                StudentGuidedListResponse student = new StudentGuidedListResponse();
                 IntrareDetaliiLicente det = new IntrareDetaliiLicente();
-                student.setId(result.getInt(1));
-                System.out.println("id este: " + result.getInt(1));
-                student.setNume(result.getString(2));
-                student.setPrenume(result.getString(3));
-                det.setNota1Oral(result.getInt(4));
-                det.setNota2Oral(result.getInt(5));
-                det.setNota3Oral(result.getInt(6));
-                det.setNota4Oral(result.getInt(7));
-                det.setNota1Proiect(result.getInt(8));
-                det.setNota2Proiect(result.getInt(9));
-                det.setNota3Proiect(result.getInt(10));
-                det.setNota4Proiect(result.getInt(11));
-                student.setDetaliiLicenta(det);
-
+                //if(result.wasNull())
+                //{
+                student.setIdStudent(result.getInt(1));
+                //}
+                student.setNumeStudent(result.getString(2));
+                student.setPrenumStudent(result.getString(3));
+                student.setNota1oral(result.getInt(4));
+                student.setNota2oral(result.getInt(5));
+                student.setNota3oral(result.getInt(6));
+                student.setNota4oral(result.getInt(7));
+                student.setNota1project(result.getInt(8));
+                student.setNota2project(result.getInt(9));
+                student.setNota3project(result.getInt(10));
+                student.setNota4project(result.getInt(11));
+                Double project = 0.0;
+                Double oral = 0.0;
+                // project =
+                project = (double) (student.getNota1project() + student.getNota2project() + student.getNota3project() + student.getNota4project());
+                oral = (double) (student.getNota1oral() + student.getNota2oral() + student.getNota3oral() + student.getNota4oral());
+                student.setNotaFinala(Math.floor((Math.floor(project / nrProjectMarks * 100) / 100 + Math.floor(oral / nrOralMarks * 100) / 100) / 2.0 * 100) / 100.0);
                 result_return.add(student);
             }
             return result_return;
@@ -410,53 +447,32 @@ public class BD {
 
     //16.functie: un profesor poate sa adauge un student
 
-    public boolean addStudent(int idTeacher, String numeStud, String prenumeStud) {
-        int idLicenta = 0;
-        int idStud = 0;
-        int idSes = 0;
-        String apel = "select id,id_sesiune from studenti where nume=? and prenume=?";
+    public int getIdStudentByName(String numeStudent, String prenumeStudent) {
+        String apelSelect = "Select id from studenti where nume = ? and prenume = ?";
+        int idStudent = 0;
         try {
+            PreparedStatement statementSelect = conexiune.prepareStatement(apelSelect);
+            statementSelect.setString(1, numeStudent);
+            statementSelect.setString(2, prenumeStudent);
+            ResultSet result = statementSelect.executeQuery();
+            while (result.next()) {
+                idStudent = result.getInt(1);
+            }
+            return idStudent;
+        } catch (Exception e) {
+            System.out.println("Exceptie la obtinerea studentilor: " + e.getMessage());
+            return 0;
+        }
+    }
 
+    public boolean addStudent(int idTeacher, String numeStudent, String prenumeStudent) {
+        String apel = " Update licente set ID_PROFESOR = ? where  ID_STUDENT = ? ";
+        int idStudent = getIdStudentByName(numeStudent, prenumeStudent);
+        try {
             PreparedStatement statement = conexiune.prepareStatement(apel);
-            statement.setString(1, numeStud);
-            statement.setString(2, prenumeStud);
-            ResultSet result = statement.executeQuery();
-
-
-            if (result.next()) {
-
-                idStud = result.getInt(1);
-                idSes = result.getInt(2);
-                System.out.println(idStud);
-                System.out.println(idSes);
-
-            }
-            if (idStud == 0 && idSes == 0)// verificam daca exista studentul in baza de date;
-                return false;
-
-            String apel2 = "select max(id) from licente";
-            PreparedStatement statement2 = conexiune.prepareStatement(apel2);
-            ResultSet result2 = statement2.executeQuery();
-
-
-            if (result2.next()) {
-
-                idLicenta = result2.getInt(1) + 1;
-                System.out.println(idLicenta);
-
-            }
-            System.out.println(idLicenta);
-            System.out.println(idStud);
-            System.out.println(idSes);
-            String apel3 = "insert into licente(id,id_profesor,id_student,id_sesiune) values(?,?,?,?)";
-            PreparedStatement statement3 = conexiune.prepareStatement(apel3);
-            statement3.setInt(1, idLicenta);
-            statement3.setInt(2, idTeacher);
-            statement3.setInt(3, idStud);
-            statement3.setInt(4, idSes);
-            statement3.executeUpdate();
-
-
+            statement.setInt(1, idTeacher);
+            statement.setInt(2, idStudent);
+            statement.executeUpdate();
             return true;
         } catch (Exception e) {
             System.out.println("Exceptie la obtinerea studentilor: " + e.getMessage());
@@ -468,13 +484,30 @@ public class BD {
     //17.functie:un profesor poate scoate un student din lista sa
 
     public boolean removeStudent(int idTeacher, int idStudent) {
-        String apel = "delete from licente where ID_PROFESOR=? and ID_STUDENT=?";
+        String apel = " Update licente set ID_PROFESOR = null where ID_Profesor = ? and id_student = ? ";
         try {
 
             PreparedStatement statement = conexiune.prepareStatement(apel);
             statement.setInt(1, idTeacher);
             statement.setInt(2, idStudent);
             statement.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Exceptie la obtinerea studentilor: " + e.getMessage());
+            return false;
+        }
+    }
+
+    //18. functie: se poate edita data de examinare a unei comisii
+    public boolean editExaminationDate(int idComisie, String beginDate, String endDate) {
+        String apel = "update  evaluari e set e.INCEPUT_EVALUARE=to_date(?),e.sfarsit_evaluare=to_date(?)where e.id_comisie=?";
+        try {
+
+            PreparedStatement statement = conexiune.prepareStatement(apel);
+            statement.setString(1, beginDate);
+            statement.setString(2, endDate);
+            statement.setInt(3, idComisie);
+            statement.executeQuery();
 
             return true;
         } catch (Exception e) {
@@ -484,6 +517,6 @@ public class BD {
     }
 
 
-    //18,19 si 20 urmeaza sa le fac :) ( RAZVAN )
+    //15 inca nu e functionala, iar 19 si 20 le pun cand e gata si baza de date
 }
 

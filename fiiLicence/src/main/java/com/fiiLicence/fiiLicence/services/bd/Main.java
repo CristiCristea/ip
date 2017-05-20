@@ -14,10 +14,10 @@ public class Main {
     public static void main(String[] args) {
         //aici ai exemplu cum functioneaza Bd ...
         BD bd = new BD();
-       System.out.println(bd.isConnected());
+        System.out.println(bd.isConnected());
 
-        System.out.println(bd.inregistrare_stud("marian.gica@info.uaic.ro","parola"));
-        System.out.println(bd.verificare("26734715441610168437"));
+        System.out.println(bd.inregistrare_stud("marian.gica@info.uaic.ro", "parola"));
+        System.out.println(bd.verificare("26310775315331372186"));
 
    /*     bd.login("Admin","Root");
         System.out.println(bd.isLoged());
@@ -40,14 +40,12 @@ public class Main {
         System.out.println(result);*/
 
 
-
-
         //-------------------------------------verificare getProfsWithoutCommitte ----------------
 
 
-       // IntrareComisii rez = bd.getAccess().getCommitteeById(1);
-       // System.out.println(rez);
-        DatabaseServiceImpl dataBaseService = new DatabaseServiceImpl();
+        // IntrareComisii rez = bd.getAccess().getCommitteeById(1);
+        // System.out.println(rez);
+     /*   DatabaseServiceImpl dataBaseService = new DatabaseServiceImpl();
 
 
 
@@ -64,8 +62,8 @@ public class Main {
         //date
         System.out.println("Logare: "+bd.login("Admin", "Root"));
 
-       bd.setTokenByIdCont("marian.gica@info.uaic.ro","test");
-       // bd.setTokenByIdCont(4,"30ed807e4c78b937222ca5938ec65278");
+       bd.setTokenByIdCont("marian.gica@info.uaic.ro","test");*/
+        // bd.setTokenByIdCont(4,"30ed807e4c78b937222ca5938ec65278");
 
 
        /* List<ProfListResponse> profList = new ArrayList<ProfListResponse>();
@@ -92,15 +90,17 @@ public class Main {
        profesor.setId(41);
        profesor.setIdComisie(1);
        ((AccessAdminBD) accessBD).updateProfesor(profesor);*/
-        AccessAdminBD accessAdminBD = (AccessAdminBD) bd.getAccess();
+       /* AccessAdminBD accessAdminBD = (AccessAdminBD) bd.getAccess();
         IntrareLicente licenta = new IntrareLicente();
         licenta.setId(3);
         licenta.setTitlu("Licenta test");
         licenta.setTipLucrare("Licenta");
-        System.out.println(accessAdminBD.insertLicenta(licenta));
-
-
+        System.out.println(accessAdminBD.insertLicenta(licenta));*/
+        DatabaseServiceImpl se = new DatabaseServiceImpl();
+        boolean result = se.insertStudentToListProf(2, "jimmy","jimmy");
+        System.out.println("ceva");
     }
+
 
 
 }
