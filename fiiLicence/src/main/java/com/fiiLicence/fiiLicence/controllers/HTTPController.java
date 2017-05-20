@@ -193,7 +193,7 @@ public class HTTPController {
         return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
     }
 
-    //13 ---------------------------------------- /GETPROFSWITHOUTCOMMITTE -------------------------------------------------
+    //13 ---------------------------------------- /GETEVALUATESTUDENTBYCOMMITE -------------------------------------------------
     //@CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/getEvaluateStudentsByCommitte", method = RequestMethod.POST)
     public ResponseEntity<List<StudentResponse>> getEvaluateStudentsByCommitte(@RequestHeader("Authorization") String token,@RequestBody IdResponse request) {

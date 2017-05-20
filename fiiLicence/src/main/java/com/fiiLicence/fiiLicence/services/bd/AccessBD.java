@@ -156,7 +156,27 @@ public class AccessBD {
         }
 
     }
+    public IntrareStudenti getStudentByID(int idProf) {
+        IntrareStudenti intrare = new IntrareStudenti();
+        try {
+            Statement statement = conexiune.createStatement();
+            ResultSet result = statement.executeQuery("Select * from studenti");
+            while (result.next()) {
+                intrare.setId(result.getInt(1));
+                intrare.setIdCont(result.getInt(2));
+                intrare.setNrMatricol(result.getString(3));
+                intrare.setNume(result.getString(4));
+                intrare.setPrenume(result.getString(5));
+                intrare.setId_comisie(result.getInt(6 ));
+                intrare.setIdSesiune(result.getInt(7));
+            }
+            return intrare;
+        } catch (Exception e) {
+            System.out.println("Exceptie la selectProfesori :" + e.getMessage());
+            return null;
+        }
 
+    }
 
     public List<IntrareStudenti> getStudentsByCommitte(int idCommitte) {
         List<IntrareStudenti> listaStudenti = new ArrayList<IntrareStudenti>();

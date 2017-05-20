@@ -9,7 +9,8 @@ public class IntrareComisii {
     int idSecretar;
     String tipComisie;
     int idEvaluare;
-    String dataEvaluare;
+    String beginDate;
+    String endDate;
     String numeComisie;
 
 
@@ -77,12 +78,20 @@ public class IntrareComisii {
         this.idEvaluare = idEvaluare;
     }
 
-    public String getDataEvaluare() {
-        return dataEvaluare;
+    public String getBeginDate() {
+        return beginDate;
     }
 
-    public void setDataEvaluare(String dataEvaluare) {
-        this.dataEvaluare = dataEvaluare;
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public String getNumeComisie() {

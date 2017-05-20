@@ -101,6 +101,8 @@ public class AccessAdminBD extends AccessBD {
                 intrare.setIdSecretar(result.getInt(6));
                 intrare.setTipComisie(result.getString(7));
                 intrare.setIdEvaluare(result.getInt(8));
+                intrare.setBeginDate(result.getString(12));
+                intrare.setEndDate(result.getString(13));
                 rezultat.add(intrare);
             }
             return rezultat;

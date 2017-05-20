@@ -97,7 +97,7 @@ public class Main {
         licenta.setTipLucrare("Licenta");
         System.out.println(accessAdminBD.insertLicenta(licenta));*/
         DatabaseServiceImpl se = new DatabaseServiceImpl();
-        boolean result = se.insertStudentToListProf(2, "jimmy","jimmy");
+        boolean result = se.modifyDate(1, "03-01-2018","04-01-2018");
         System.out.println("ceva");
     }
 

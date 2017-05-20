@@ -221,6 +221,8 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public GradeResponse getStudentGrade(int idStudent) {
         GradeResponse grade = new GradeResponse();
+        IntrareStudenti student = new IntrareStudenti();
+        student = bd.getStudentByID(idStudent);
         grade.setGrade(10);
         return grade;
     }
@@ -280,7 +282,8 @@ public class DatabaseServiceImpl implements DatabaseService {
             CommitteListResponse comListRes = new CommitteListResponse();
             comListRes.setId(c.getId());
             comListRes.setNumeComisie("Comisie " + comListRes.getId());
-            comListRes.setDataExaminare(c.getDataEvaluare());
+            comListRes.setBeginDate(c.getBeginDate());
+            comListRes.setEndDate(c.getEndDate());
             committeeList.add(comListRes);
         }
 
@@ -518,7 +521,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             - data_examinare (String) (forma data: 'DD-MM-YYYY')
     Output: - result (Boolean) (true - daca data a fost modificata, false - orice alt motiv)*/
     @Override
-    public boolean modifyDate(int idCommitte,String beginDate,String endDate) {
+    public boolean modifyDate(int idCommitte, String beginDate, String endDate) {
 
         BD b = new BD();
         return b.editExaminationDate(idCommitte, beginDate, endDate);

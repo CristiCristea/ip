@@ -3,7 +3,8 @@ package com.fiiLicence.fiiLicence.models.response;
 public class CommitteListResponse {
     private int id;
     private String numeComisie;
-    private String dataExaminare;
+    private String beginDate;
+    private String endDate;
 
     public int getId() {
         return id;
@@ -21,11 +22,19 @@ public class CommitteListResponse {
         this.numeComisie = numeComisie;
     }
 
-    public String getDataExaminare() {
-        return dataExaminare;
+    public String getBeginDate() {
+        return beginDate;
     }
 
-    public void setDataExaminare(String dataExaminare) {
-        this.dataExaminare = dataExaminare;
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }
