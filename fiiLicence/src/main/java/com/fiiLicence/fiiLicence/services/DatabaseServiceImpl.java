@@ -4,6 +4,7 @@ import com.fiiLicence.fiiLicence.models.response.*;
 import com.fiiLicence.fiiLicence.services.bd.*;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,9 +67,17 @@ public class DatabaseServiceImpl implements DatabaseService {
         if (profsIdList.contains(idProfesor)) {
             return true;
         }
-
         return false;
+    }
 
+    private double calculateGrade(List<Integer> gradesOral,List<Integer> gradesProject){
+        double gradeOral = 0.0;
+        double gradeProject = 0.0;
+        for(Integer index : gradesOral)
+            gradeOral += index;
+        for(Integer index : gradesProject)
+            gradeProject += index;
+        return Math.floor((Math.floor(gradeProject/gradesProject.size() * 100) / 100 + Math.floor(gradeOral/gradesOral.size() * 100) / 100) / 2.0 * 100) / 100.0;
     }
 
 
@@ -184,11 +193,12 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public boolean recordLicence(String token, String nameOfLicence, int idProfesor, String descriptionOfLicence) {
         int idCont;
-        IntrareConturi cont = new IntrareConturi();
-        IntrareStudenti student = new IntrareStudenti();
+        IntrareConturi cont;
+        IntrareStudenti student;
         AccessAdminBD accessAdminBD = (AccessAdminBD) bd.getAccess();
         IntrareLicente licenta = new IntrareLicente();
         List<IntrareLicente> licente = accessAdminBD.selectLicente();
+        IntrareDetaliiLicente intrareDetaliiLicente = new IntrareDetaliiLicente();
 
         cont = bd.getContByToken(token);
         idCont = cont.getId();
@@ -207,11 +217,13 @@ public class DatabaseServiceImpl implements DatabaseService {
         licenta.setIdProfesor(idProfesor);
         licenta.setTipLucrare(descriptionOfLicence);
         licenta.setIdStudent(student.getId());
+        intrareDetaliiLicente.setId(0);
 
-        if (accessAdminBD.insertLicenta(licenta) == 0)
+        if (accessAdminBD.insertLicenta(licenta) == 0 && accessAdminBD.insertDetaliiLicenta(intrareDetaliiLicente) == 0)
             return true;
         else
             return false;
+
     }
 
     /*7.
@@ -221,9 +233,37 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public GradeResponse getStudentGrade(int idStudent) {
         GradeResponse grade = new GradeResponse();
-        IntrareStudenti student = new IntrareStudenti();
-        student = bd.getStudentByID(idStudent);
-        grade.setGrade(10);
+        StudentGrade studentGrades;
+        ProfsFromCommitte profesori;
+        List<Integer> gradesOral = new ArrayList<Integer>();
+        List<Integer> gradesProject = new ArrayList<Integer>();
+        studentGrades = bd.getAllGrade(idStudent);
+        profesori = bd.getProfFromCommitte(studentGrades.getIdComisie());
+
+        grade.setGrade(-1);
+
+        gradesOral.add(studentGrades.getNota1Oral());
+        gradesOral.add(studentGrades.getNota2Oral());
+        gradesOral.add(studentGrades.getNota3Oral());
+        gradesProject.add(studentGrades.getNota1Project());
+        gradesProject.add(studentGrades.getNota2Project());
+        gradesProject.add(studentGrades.getNota3Project());
+        if(studentGrades.getTipLicenta() == null)
+            return grade;
+        if (studentGrades.getTipLicenta().equals("Licenta")) {
+            if (!profesori.containsId(studentGrades.getIdProfesor())) {
+                gradesOral.add(studentGrades.getNota5Oral());
+                gradesProject.add(studentGrades.getNota5Project());
+            }
+        } else if (studentGrades.getTipLicenta().equals("Dizertatie")) {
+            gradesOral.add(studentGrades.getNota4Oral());
+            gradesOral.add(studentGrades.getNota4Project());
+            if (!profesori.containsId(studentGrades.getIdProfesor())) {
+                gradesOral.add(studentGrades.getNota5Project());
+                gradesProject.add(studentGrades.getNota5Project());
+            }
+        }
+        grade.setGrade(calculateGrade(gradesOral,gradesProject));
         return grade;
     }
 

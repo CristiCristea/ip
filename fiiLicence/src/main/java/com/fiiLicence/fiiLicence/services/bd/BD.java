@@ -1,5 +1,7 @@
 package com.fiiLicence.fiiLicence.services.bd;
 
+import com.fiiLicence.fiiLicence.models.response.ProfsFromCommitte;
+import com.fiiLicence.fiiLicence.models.response.StudentGrade;
 import com.fiiLicence.fiiLicence.models.response.StudentGuidedListResponse;
 
 import java.sql.CallableStatement;
@@ -349,7 +351,7 @@ public class BD {
                 intrare.setNrMatricol(result.getString(3));
                 intrare.setNume(result.getString(4));
                 intrare.setPrenume(result.getString(5));
-                intrare.setId_comisie(result.getInt(6 ));
+                intrare.setId_comisie(result.getInt(6));
                 intrare.setIdSesiune(result.getInt(7));
             }
             return intrare;
@@ -387,6 +389,54 @@ public class BD {
     }
 
 
+    public StudentGrade getAllGrade(int idStudent) {
+        StudentGrade student = new StudentGrade();
+        String apel = "SELECT id_profesor, id_comisie, nota_1_oral, nota_2_oral, nota_3_oral, nota_4_oral_dizertatie, nota_5_oral_coordonator, nota_1_PROIECT, NOTA_2_PROIECT, NOTA_3_PROIECT, NOTA_4_PROIECT_DIZERTATIE, NOTA_5_PROIECT_COORDONATOR,tip FROM licente JOIN DETALII_LICENTE ON LICENTE.ID = DETALII_LICENTE.ID where LICENTE.ID_STUDENT = ?";
+        try {
+            PreparedStatement statement = conexiune.prepareStatement(apel);
+            statement.setInt(1, idStudent);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                student.setIdProfesor(result.getInt(1));
+                student.setIdComisie(result.getInt(2));
+                student.setNota1Oral(result.getInt(3));
+                student.setNota2Oral(result.getInt(4));
+                student.setNota3Oral(result.getInt(5));
+                student.setNota4Oral(result.getInt(6));
+                student.setNota5Oral(result.getInt(7));
+                student.setNota1Project(result.getInt(8));
+                student.setNota2Project(result.getInt(9));
+                student.setNota3Project(result.getInt(10));
+                student.setNota4Project(result.getInt(11));
+                student.setNota5Project(result.getInt(12));
+                student.setTipLicenta(result.getString(13));
+            }
+            return student;
+        } catch (Exception e) {
+            System.out.println("Exceptie la obtinerea notelor: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public ProfsFromCommitte getProfFromCommitte(int idComisie) {
+        ProfsFromCommitte profesori = new ProfsFromCommitte();
+        String apel = "select ID_PROF1,ID_PROF2,ID_PROF3,ID_PROF4_DIZERTATIE from comisii where id = ?";
+        try{
+            PreparedStatement statement = conexiune.prepareStatement(apel);
+            statement.setInt(1, idComisie);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                profesori.setProfesor1(result.getInt(1));
+                profesori.setProfesor2(result.getInt(2));
+                profesori.setProfesor3(result.getInt(3));
+                profesori.setProfesor4(result.getInt(4));
+            }
+            return profesori;
+        }catch (Exception e){
+            System.out.println("Exceptie la obtinerea Profesorilor Din Comisie: " + e.getMessage());
+            return null;
+        }
+    }
     //15.functie : luam toti studentii in functie de un profesor
 
     public List<StudentGuidedListResponse> getStudentsOfATeacher(int idTeacher) {

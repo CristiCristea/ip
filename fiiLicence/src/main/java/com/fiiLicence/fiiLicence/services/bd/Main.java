@@ -1,8 +1,7 @@
 package com.fiiLicence.fiiLicence.services.bd;
 
-import com.fiiLicence.fiiLicence.models.response.CommitteListResponse;
-import com.fiiLicence.fiiLicence.models.response.IdResponse;
-import com.fiiLicence.fiiLicence.models.response.ProfListResponse;
+import com.fiiLicence.fiiLicence.models.response.*;
+import com.fiiLicence.fiiLicence.services.DatabaseService;
 import com.fiiLicence.fiiLicence.services.DatabaseServiceImpl;
 
 import java.io.PrintStream;
@@ -17,7 +16,7 @@ public class Main {
         System.out.println(bd.isConnected());
 
         System.out.println(bd.inregistrare_stud("marian.gica@info.uaic.ro", "parola"));
-        System.out.println(bd.verificare("26310775315331372186"));
+        System.out.println(bd.verificare("73251266048443412760"));
 
    /*     bd.login("Admin","Root");
         System.out.println(bd.isLoged());
@@ -95,12 +94,13 @@ public class Main {
         licenta.setId(3);
         licenta.setTitlu("Licenta test");
         licenta.setTipLucrare("Licenta");
-        System.out.println(accessAdminBD.insertLicenta(licenta));*/
+        System.out.println(accessAdminBD.insertLicenta(licenta));
         DatabaseServiceImpl se = new DatabaseServiceImpl();
         boolean result = se.modifyDate(1, "03-01-2018","04-01-2018");
-        System.out.println("ceva");
+        System.out.println("ceva");*/
+        DatabaseServiceImpl dataBase = new DatabaseServiceImpl();
+        System.out.println(dataBase.getStudentGrade(3));
+        
     }
-
-
 
 }

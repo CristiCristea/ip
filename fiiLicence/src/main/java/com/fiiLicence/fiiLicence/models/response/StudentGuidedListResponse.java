@@ -13,6 +13,8 @@ public class StudentGuidedListResponse {
     private int nota2project;
     private int nota3project;
     private int nota4project;
+    private int nota5oral;
+    private int nota5project;
 
     public int getIdStudent() {
         return idStudent;
@@ -108,5 +110,21 @@ public class StudentGuidedListResponse {
 
     public void setNota4project(int nota4project) {
         this.nota4project = nota4project;
+    }
+
+    public int getNota5oral() {
+        return nota5oral;
+    }
+
+    public void setNota5oral(int nota5oral) {
+        this.nota5oral = nota5oral;
+    }
+
+    public int getNota5project() {
+        return nota5project;
+    }
+
+    public void setNota5project(int nota5project) {
+        this.nota5project = nota5project;
     }
 }
