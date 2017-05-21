@@ -1,8 +1,11 @@
 package com.fiiLicence.fiiLicence.services.bd;
 
+import com.fiiLicence.fiiLicence.models.response.GradeResponse;
 import com.fiiLicence.fiiLicence.models.response.ProfsFromCommitte;
 import com.fiiLicence.fiiLicence.models.response.StudentGrade;
 import com.fiiLicence.fiiLicence.models.response.StudentGuidedListResponse;
+import com.fiiLicence.fiiLicence.services.DatabaseService;
+import com.fiiLicence.fiiLicence.services.DatabaseServiceImpl;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -421,7 +424,7 @@ public class BD {
     public ProfsFromCommitte getProfFromCommitte(int idComisie) {
         ProfsFromCommitte profesori = new ProfsFromCommitte();
         String apel = "select ID_PROF1,ID_PROF2,ID_PROF3,ID_PROF4_DIZERTATIE from comisii where id = ?";
-        try{
+        try {
             PreparedStatement statement = conexiune.prepareStatement(apel);
             statement.setInt(1, idComisie);
             ResultSet result = statement.executeQuery();
@@ -432,7 +435,7 @@ public class BD {
                 profesori.setProfesor4(result.getInt(4));
             }
             return profesori;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Exceptie la obtinerea Profesorilor Din Comisie: " + e.getMessage());
             return null;
         }
@@ -440,43 +443,33 @@ public class BD {
     //15.functie : luam toti studentii in functie de un profesor
 
     public List<StudentGuidedListResponse> getStudentsOfATeacher(int idTeacher) {
-        List<StudentGuidedListResponse> result_return = new ArrayList<>();
-        String apel = "select distinct st.id,st.nume,st.prenume,d.NOTA_1_ORAL,d.NOTA_2_ORAL,d.NOTA_3_ORAL,d.NOTA_4_ORAL_DIZERTATIE,d.NOTA_1_proiect,d.NOTA_2_proiect,d.NOTA_3_proiect,d.NOTA_4_PROIECT_DIZERTATIE  from detalii_licente d join comisii c on d.id_comisie=c.id join evaluari e on e.id_comisie=c.id join sesiuni s on s.id=e.id_sesiune join studenti st on s.id=st.id_sesiune join profesori p on p.ID_COMISIE=c.id where p.id= ?";
-
+        List<StudentGuidedListResponse> studentOfATeacher = new ArrayList<>();
+        String apel = "SELECT nota_1_oral, nota_2_oral, nota_3_oral, nota_4_oral_dizertatie,nota_5_oral_coordonator, nota_1_PROIECT, NOTA_2_PROIECT, NOTA_3_PROIECT, NOTA_4_PROIECT_DIZERTATIE, NOTA_5_PROIECT_COORDONATOR, STUDENTI.ID, STUDENTI.NUME, STUDENTI.PRENUME FROM licente JOIN DETALII_LICENTE ON LICENTE.ID = DETALII_LICENTE.ID join STUDENTI on LICENTE.ID_STUDENT = STUDENTI.ID WHERE LICENTE.ID_PROFESOR = ?";
         try {
-
             PreparedStatement statement = conexiune.prepareStatement(apel);
             statement.setInt(1, idTeacher);
             ResultSet result = statement.executeQuery();
-            System.out.println("ceao marocanii " + result.getFetchSize());
-            while (result.next()) { //something wrong i do, but i don't know what :(
-                int nrProjectMarks = 4;
-                int nrOralMarks = 4;
+            while (result.next()) {
                 StudentGuidedListResponse student = new StudentGuidedListResponse();
-                IntrareDetaliiLicente det = new IntrareDetaliiLicente();
-                //if(result.wasNull())
-                //{
-                student.setIdStudent(result.getInt(1));
-                //}
-                student.setNumeStudent(result.getString(2));
-                student.setPrenumStudent(result.getString(3));
-                student.setNota1oral(result.getInt(4));
-                student.setNota2oral(result.getInt(5));
-                student.setNota3oral(result.getInt(6));
-                student.setNota4oral(result.getInt(7));
-                student.setNota1project(result.getInt(8));
-                student.setNota2project(result.getInt(9));
-                student.setNota3project(result.getInt(10));
-                student.setNota4project(result.getInt(11));
-                Double project = 0.0;
-                Double oral = 0.0;
-                // project =
-                project = (double) (student.getNota1project() + student.getNota2project() + student.getNota3project() + student.getNota4project());
-                oral = (double) (student.getNota1oral() + student.getNota2oral() + student.getNota3oral() + student.getNota4oral());
-                student.setNotaFinala(Math.floor((Math.floor(project / nrProjectMarks * 100) / 100 + Math.floor(oral / nrOralMarks * 100) / 100) / 2.0 * 100) / 100.0);
-                result_return.add(student);
+                DatabaseServiceImpl databaseService = new DatabaseServiceImpl();
+                student.setNota1oral(result.getInt(1));
+                student.setNota2oral(result.getInt(2));
+                student.setNota3oral(result.getInt(3));
+                student.setNota4oral(result.getInt(4));
+                student.setNota5oral(result.getInt(5));
+                student.setNota1project(result.getInt(6));
+                student.setNota2project(result.getInt(7));
+                student.setNota3project(result.getInt(8));
+                student.setNota4project(result.getInt(9));
+                student.setNota5project(result.getInt(10));
+                student.setIdStudent(result.getInt(11));
+                student.setNumeStudent(result.getString(12));
+                student.setPrenumStudent(result.getString(13));
+                GradeResponse grade = databaseService.getStudentGrade(student.getIdStudent());
+                student.setNotaFinala(grade.getGrade());
+                studentOfATeacher.add(student);
             }
-            return result_return;
+            return studentOfATeacher;
         } catch (Exception e) {
             System.out.println("Exceptie la obtinerea studentilor: " + e.getMessage());
             return null;

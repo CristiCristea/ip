@@ -70,14 +70,14 @@ public class DatabaseServiceImpl implements DatabaseService {
         return false;
     }
 
-    private double calculateGrade(List<Integer> gradesOral,List<Integer> gradesProject){
+    private double calculateGrade(List<Integer> gradesOral, List<Integer> gradesProject) {
         double gradeOral = 0.0;
         double gradeProject = 0.0;
-        for(Integer index : gradesOral)
+        for (Integer index : gradesOral)
             gradeOral += index;
-        for(Integer index : gradesProject)
+        for (Integer index : gradesProject)
             gradeProject += index;
-        return Math.floor((Math.floor(gradeProject/gradesProject.size() * 100) / 100 + Math.floor(gradeOral/gradesOral.size() * 100) / 100) / 2.0 * 100) / 100.0;
+        return Math.floor((Math.floor(gradeProject / gradesProject.size() * 100) / 100 + Math.floor(gradeOral / gradesOral.size() * 100) / 100) / 2.0 * 100) / 100.0;
     }
 
 
@@ -248,7 +248,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         gradesProject.add(studentGrades.getNota1Project());
         gradesProject.add(studentGrades.getNota2Project());
         gradesProject.add(studentGrades.getNota3Project());
-        if(studentGrades.getTipLicenta() == null)
+        if (studentGrades.getTipLicenta() == null)
             return grade;
         if (studentGrades.getTipLicenta().equals("Licenta")) {
             if (!profesori.containsId(studentGrades.getIdProfesor())) {
@@ -263,7 +263,7 @@ public class DatabaseServiceImpl implements DatabaseService {
                 gradesProject.add(studentGrades.getNota5Project());
             }
         }
-        grade.setGrade(calculateGrade(gradesOral,gradesProject));
+        grade.setGrade(calculateGrade(gradesOral, gradesProject));
         return grade;
     }
 
@@ -529,7 +529,8 @@ public class DatabaseServiceImpl implements DatabaseService {
                 (daca notele nu exista se reurneaza -1 pe fiecare dintre ele)*/
     @Override
     public List<StudentGuidedListResponse> getStudentGuided(int idProf) {
-        return null;
+        BD b = new BD();
+        return  b.getStudentsOfATeacher(idProf);
     }
 
     /*16.

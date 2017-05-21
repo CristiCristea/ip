@@ -127,4 +127,22 @@ public class StudentGuidedListResponse {
     public void setNota5project(int nota5project) {
         this.nota5project = nota5project;
     }
+
+    @Override
+    public String toString() {
+        return idStudent + " " +
+                numeStudent +" " +
+                prenumStudent +" " +
+                nota1oral +" " +
+                nota2oral +" " +
+                nota3oral +" " +
+                nota4oral +" " +
+                nota5oral +" " +
+                nota1project +" " +
+                nota1project +" " +
+                nota1project +" " +
+                nota1project +" " +
+                nota1project +" " +
+                notaFinala;
+    }
 }
