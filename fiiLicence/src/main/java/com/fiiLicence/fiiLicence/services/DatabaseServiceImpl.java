@@ -471,8 +471,10 @@ public class DatabaseServiceImpl implements DatabaseService {
             - prenume_stud (String)
     Output: - result (Boolean) (true - daca studentul a fost adauga, false - orice alt motiv)*/
     @Override
-    public boolean insertStudentToListProf(int idProf, String numeStudent, String prenumeStudent) {
+    public boolean insertStudentToListProf(int idProf, String email) {
         BD b = new BD();
+        String prenumeStudent = email.substring(email.indexOf('.') + 1,email.indexOf('@'));
+        String numeStudent = email.substring(0,email.indexOf('.'));
         return b.addStudent(idProf, numeStudent, prenumeStudent);
     }
 

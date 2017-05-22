@@ -29,6 +29,13 @@ public class Main {
          for(StudentGuidedListResponse index : studenti){
            System.out.println(index);
         }
+        /*String email = "marian.gica@info.uaic.ro";
+        BD b = new BD();
+        String prenumeStudent = email.substring(email.indexOf('.')+ 1,email.indexOf('@'));
+        String numeStudent = email.substring(0,email.indexOf('.'));
+        System.out.println(prenumeStudent+"  "+numeStudent);
+        //b.addStudent(1, numeStudent, prenumeStudent);*/
+       databaseService.insertStudentToListProf(22,"marian.gica@info.uaic.ro");
         
     }
 

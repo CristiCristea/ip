@@ -244,12 +244,12 @@ public class HTTPController {
     @RequestMapping(value = "/insertStudentToListProf", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> insertStudentToListProf(@RequestHeader("Authorization") String token, @RequestBody InsertStudentRequest request) {
 
-        boolean result = databaseService.insertStudentToListProf(request.getIdProf(),request.getNumeStudent(),request.getPrenumeStudent());
+        boolean result = databaseService.insertStudentToListProf(request.getIdProf(),request.getEmail());
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
 
-        System.out.println("------ /insertStudentToListProf - " + request.getIdProf() +" " + request.getNumeStudent()+" "+request.getPrenumeStudent() + " - " + result + " ------");
+        System.out.println("------ /insertStudentToListProf - " + request.getIdProf() +" " + request.getEmail()+ " - " + result + " ------");
         return new ResponseEntity<RegistrationResponse>(response, HttpStatus.OK);
     }
 

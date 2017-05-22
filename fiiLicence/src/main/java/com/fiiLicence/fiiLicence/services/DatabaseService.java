@@ -53,7 +53,7 @@ public interface DatabaseService {
     List<StudentGuidedListResponse> getStudentGuided(int idProf);
 
     //16
-    boolean insertStudentToListProf(int idProf, String numeStudent, String prenumeStudent);
+    boolean insertStudentToListProf(int idProf, String email);
 
     //17
     boolean deleteStudentToListProf(int idProf, int idStudent);
