@@ -41,7 +41,7 @@ public interface DatabaseService {
     List<IdResponse> getProfsWithoutCommitte(String token);
 
     //12
-    boolean moveProfToCommitte(String token, int idProf, int idCommitte);
+    boolean moveProfToCommitte(int idProf, int idCommitte, String token);
 
     //13
     List<StudentResponse> getEvaluateStudentsByCommitte(int idCommitte);

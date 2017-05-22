@@ -184,7 +184,7 @@ public class HTTPController {
     @RequestMapping(value = "/moveProfToCommitte", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> moveProfToCommitte(@RequestHeader("Authorization") String token, @RequestBody MoveProfRequest request) {
 
-        boolean result = databaseService.moveProfToCommitte(token,request.getIdProf(),request.getIdCommitte());
+        boolean result = databaseService.moveProfToCommitte(request.getIdProf(),request.getIdCommitte(),token);
 
         RegistrationResponse response = new RegistrationResponse();
         response.setResponse(result);
