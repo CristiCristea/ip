@@ -1,5 +1,4 @@
 package com.fiiLicence.fiiLicence.services.bd;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,15 +19,23 @@ public class AccessAdminBD extends AccessBD {
         try {
             Statement statement = conexiune.createStatement();
             ResultSet result = statement.executeQuery("Select * from mesaje");
-            while (result.next()) {
-                IntrareMesaje intrare = new IntrareMesaje();
-                intrare.setId(result.getInt(1));
-                intrare.setIdEmitator(result.getInt(2));
-                intrare.setIdDestinatar(result.getInt(3));
-                intrare.setMesaj(result.getString(4));
-                rezultat.add(intrare);
+            try {
+                while (result.next()) {
+                    IntrareMesaje intrare = new IntrareMesaje();
+                    intrare.setId(result.getInt(1));
+                    intrare.setIdEmitator(result.getInt(2));
+                    intrare.setIdDestinatar(result.getInt(3));
+                    intrare.setMesaj(result.getString(4));
+                    rezultat.add(intrare);
+                }
+                return rezultat;
+            } finally {
+                try {
+                    statement.close();
+                    result.close();
+                } catch (Exception ignore) {
+                }
             }
-            return rezultat;
         } catch (Exception e) {
             System.out.println("Exceptie la selectMesaje: " + e.getMessage());
             return null;
@@ -41,18 +48,26 @@ public class AccessAdminBD extends AccessBD {
         try {
             Statement statement = conexiune.createStatement();
             ResultSet result = statement.executeQuery("Select * from conturi");
-            while (result.next()) {
-                IntrareConturi intrare = new IntrareConturi();
-                intrare.setId(result.getInt(1));
-                intrare.setUsername(result.getString(2));
-                intrare.setHashparola(result.getString(3));
-                intrare.setEmail(result.getString(4));
-                intrare.setTipUtilizator(result.getString(5));
-                intrare.setStatus(result.getInt(6));
-                intrare.setCodActivare(result.getString(7));
-                intrare.setToken(result.getString(8));
+            try {
+                while (result.next()) {
+                    IntrareConturi intrare = new IntrareConturi();
+                    intrare.setId(result.getInt(1));
+                    intrare.setUsername(result.getString(2));
+                    intrare.setHashparola(result.getString(3));
+                    intrare.setEmail(result.getString(4));
+                    intrare.setTipUtilizator(result.getString(5));
+                    intrare.setStatus(result.getInt(6));
+                    intrare.setCodActivare(result.getString(7));
+                    intrare.setToken(result.getString(8));
 
-                rezultat.add(intrare);
+                    rezultat.add(intrare);
+                }
+            } finally {
+                try {
+                    statement.close();
+                    result.close();
+                } catch (Exception ignore) {
+                }
             }
             return rezultat;
         } catch (Exception e) {
@@ -66,16 +81,24 @@ public class AccessAdminBD extends AccessBD {
         try {
             Statement statement = conexiune.createStatement();
             ResultSet result = statement.executeQuery("Select * from studenti");
-            while (result.next()) {
-                IntrareStudenti intrare = new IntrareStudenti();
-                intrare.setId(result.getInt(1));
-                intrare.setIdCont(result.getInt(2));
-                intrare.setNrMatricol(result.getString(3));
-                intrare.setNume(result.getString(4));
-                intrare.setPrenume(result.getString(5));
-                intrare.setId_comisie(result.getInt(6));
-                intrare.setIdSesiune(result.getInt(7));
-                rezultat.add(intrare);
+            try {
+                while (result.next()) {
+                    IntrareStudenti intrare = new IntrareStudenti();
+                    intrare.setId(result.getInt(1));
+                    intrare.setIdCont(result.getInt(2));
+                    intrare.setNrMatricol(result.getString(3));
+                    intrare.setNume(result.getString(4));
+                    intrare.setPrenume(result.getString(5));
+                    intrare.setId_comisie(result.getInt(6));
+                    intrare.setIdSesiune(result.getInt(7));
+                    rezultat.add(intrare);
+                }
+            } finally {
+                try {
+                    statement.close();
+                    result.close();
+                } catch (Exception ignore) {
+                }
             }
             return rezultat;
         } catch (Exception e) {
@@ -85,25 +108,32 @@ public class AccessAdminBD extends AccessBD {
     }
 
 
-
     public List<IntrareComisii> selectComisii() {
         List<IntrareComisii> rezultat = new ArrayList<IntrareComisii>();
         try {
             PreparedStatement pStatement = conexiune.prepareStatement("SELECT * FROM comisii c join evaluari e on c.id = e.id_comisie");
             ResultSet result = pStatement.executeQuery();
-            while (result.next()) {
-                IntrareComisii intrare = new IntrareComisii();
-                intrare.setId(result.getInt(1));
-                intrare.setIdProfSef(result.getInt(2));
-                intrare.setIdProf2(result.getInt(3));
-                intrare.setIdProf3(result.getInt(4));
-                intrare.setIdProf4(result.getInt(5));
-                intrare.setIdSecretar(result.getInt(6));
-                intrare.setTipComisie(result.getString(7));
-                intrare.setIdEvaluare(result.getInt(8));
-                intrare.setBeginDate(result.getString(12));
-                intrare.setEndDate(result.getString(13));
-                rezultat.add(intrare);
+            try {
+                while (result.next()) {
+                    IntrareComisii intrare = new IntrareComisii();
+                    intrare.setId(result.getInt(1));
+                    intrare.setIdProfSef(result.getInt(2));
+                    intrare.setIdProf2(result.getInt(3));
+                    intrare.setIdProf3(result.getInt(4));
+                    intrare.setIdProf4(result.getInt(5));
+                    intrare.setIdSecretar(result.getInt(6));
+                    intrare.setTipComisie(result.getString(7));
+                    intrare.setIdEvaluare(result.getInt(8));
+                    intrare.setBeginDate(result.getString(12));
+                    intrare.setEndDate(result.getString(13));
+                    rezultat.add(intrare);
+                }
+            } finally {
+                try {
+                    pStatement.close();
+                    result.close();
+                } catch (Exception ignore) {
+                }
             }
             return rezultat;
         } catch (Exception e) {
@@ -118,15 +148,23 @@ public class AccessAdminBD extends AccessBD {
 
             Statement statement = conexiune.createStatement();
             ResultSet result = statement.executeQuery("Select * from evaluari");
-            while (result.next()) {
-                IntrareEvaluari intrare = new IntrareEvaluari();
-                intrare.setId(result.getInt(1));
-                intrare.setIdSesiune(result.getInt(2));
-                intrare.setIdComisie(result.getInt(3));
-                intrare.setInceputEvaluare(result.getTimestamp(4));
-                intrare.setSfarsitEvaluare(result.getTimestamp(5));
-                intrare.setSala(result.getString(6));
-                rezultat.add(intrare);
+            try {
+                while (result.next()) {
+                    IntrareEvaluari intrare = new IntrareEvaluari();
+                    intrare.setId(result.getInt(1));
+                    intrare.setIdSesiune(result.getInt(2));
+                    intrare.setIdComisie(result.getInt(3));
+                    intrare.setInceputEvaluare(result.getTimestamp(4));
+                    intrare.setSfarsitEvaluare(result.getTimestamp(5));
+                    intrare.setSala(result.getString(6));
+                    rezultat.add(intrare);
+                }
+            } finally {
+                try {
+                    statement.close();
+                    result.close();
+                } catch (Exception ignore) {
+                }
             }
             return rezultat;
         } catch (Exception e) {
@@ -141,23 +179,31 @@ public class AccessAdminBD extends AccessBD {
 
             Statement statement = conexiune.createStatement();
             ResultSet result = statement.executeQuery("Select * from detalii_licente");
-            while (result.next()) {
-                IntrareDetaliiLicente intrare = new IntrareDetaliiLicente();
-                intrare.setId(result.getInt(1));
-                intrare.setIdComisie(result.getInt(2));
-                intrare.setNota1Oral(result.getInt(3));
-                intrare.setNota1Proiect(result.getInt(4));
-                intrare.setNota2Oral(result.getInt(5));
-                intrare.setNota2Proiect(result.getInt(6));
-                intrare.setNota3Oral(result.getInt(7));
-                intrare.setNota3Proiect(result.getInt(8));
-                intrare.setNota4Oral(result.getInt(9));
-                intrare.setNota4Proiect(result.getInt(10));
-                intrare.setNota5Oral(result.getInt(11));
-                intrare.setNota5Proiect(result.getInt(12));
-                intrare.setDataOraSustinerii(result.getTimestamp(13));
+            try {
+                while (result.next()) {
+                    IntrareDetaliiLicente intrare = new IntrareDetaliiLicente();
+                    intrare.setId(result.getInt(1));
+                    intrare.setIdComisie(result.getInt(2));
+                    intrare.setNota1Oral(result.getInt(3));
+                    intrare.setNota1Proiect(result.getInt(4));
+                    intrare.setNota2Oral(result.getInt(5));
+                    intrare.setNota2Proiect(result.getInt(6));
+                    intrare.setNota3Oral(result.getInt(7));
+                    intrare.setNota3Proiect(result.getInt(8));
+                    intrare.setNota4Oral(result.getInt(9));
+                    intrare.setNota4Proiect(result.getInt(10));
+                    intrare.setNota5Oral(result.getInt(11));
+                    intrare.setNota5Proiect(result.getInt(12));
+                    intrare.setDataOraSustinerii(result.getTimestamp(13));
 
-                rezultat.add(intrare);
+                    rezultat.add(intrare);
+                }
+            } finally {
+                try {
+                    result.close();
+                    statement.close();
+                } catch (Exception ignore) {
+                }
             }
 
             return rezultat;
@@ -173,17 +219,25 @@ public class AccessAdminBD extends AccessBD {
 
             Statement statement = conexiune.createStatement();
             ResultSet result = statement.executeQuery("Select * from licente");
-            while (result.next()) {
-                IntrareLicente intrare = new IntrareLicente();
-                intrare.setId(result.getInt(1));
-                intrare.setTitlu(result.getString(2));
-                intrare.setIdProfesor(result.getInt(3));
-                intrare.setIdStudent(result.getInt(4));
-                intrare.setMaterialeLicenta(result.getString(5));
-                intrare.setIdSesiune(result.getInt(6));
-                intrare.setTipLucrare(result.getString(7));
+            try {
+                while (result.next()) {
+                    IntrareLicente intrare = new IntrareLicente();
+                    intrare.setId(result.getInt(1));
+                    intrare.setTitlu(result.getString(2));
+                    intrare.setIdProfesor(result.getInt(3));
+                    intrare.setIdStudent(result.getInt(4));
+                    intrare.setMaterialeLicenta(result.getString(5));
+                    intrare.setIdSesiune(result.getInt(6));
+                    intrare.setTipLucrare(result.getString(7));
 
-                rezultat.add(intrare);
+                    rezultat.add(intrare);
+                }
+            } finally {
+                try {
+                    result.close();
+                    statement.close();
+                } catch (Exception ignore) {
+                }
             }
 
             return rezultat;
@@ -199,12 +253,20 @@ public class AccessAdminBD extends AccessBD {
 
             Statement statement = conexiune.createStatement();
             ResultSet result = statement.executeQuery("Select * from sesiuni");
-            while (result.next()) {
-                IntrareSesiuni intrare = new IntrareSesiuni();
-                intrare.setId(result.getInt(1));
-                intrare.setInceputSesiune(result.getTimestamp(2));
-                intrare.setSfarsitSesiune(result.getTimestamp(3));
-                rezultat.add(intrare);
+            try {
+                while (result.next()) {
+                    IntrareSesiuni intrare = new IntrareSesiuni();
+                    intrare.setId(result.getInt(1));
+                    intrare.setInceputSesiune(result.getTimestamp(2));
+                    intrare.setSfarsitSesiune(result.getTimestamp(3));
+                    rezultat.add(intrare);
+                }
+            } finally {
+                try {
+                    statement.close();
+                    result.close();
+                } catch (Exception ignore) {
+                }
             }
             return rezultat;
         } catch (Exception e) {
@@ -225,12 +287,26 @@ public class AccessAdminBD extends AccessBD {
                 return -1;
             }
 
+            try {
+                stmt.close();
+                rs.close();
+            } catch (Exception ignore) {
+            }
+
             PreparedStatement statement = conexiune.prepareStatement(apel);
-            statement.setInt(1, intrare.getIdEmitator());
-            statement.setInt(2, intrare.getIdDestinatar());
-            statement.setString(3, intrare.getMesaj());
-            statement.setInt(4, intrare.getId());
-            statement.executeUpdate();
+            try {
+                statement.setInt(1, intrare.getIdEmitator());
+
+                statement.setInt(2, intrare.getIdDestinatar());
+                statement.setString(3, intrare.getMesaj());
+                statement.setInt(4, intrare.getId());
+                statement.executeUpdate();
+            } finally {
+                try {
+                    statement.close();
+                } catch (Exception ignore) {
+                }
+            }
             return 0;
         } catch (Exception e) {
             System.out.println("Exceptie la updateMesaj" + e.getMessage());
@@ -251,9 +327,15 @@ public class AccessAdminBD extends AccessBD {
                 System.out.println("Intrare Inexistenta");
                 return -1;
             }
+            try {
+                stmt.close();
+                rs.close();
+            }catch (Exception ignore){}
 
             PreparedStatement statement = conexiune.prepareStatement(apel);
-            statement.setString(1, intrare.getUsername());
+            try {
+                statement.setString(1, intrare.getUsername());
+
             statement.setString(2, intrare.getHashparola());
             statement.setString(3, intrare.getEmail());
             statement.setString(4, intrare.getTipUtilizator());
@@ -263,6 +345,11 @@ public class AccessAdminBD extends AccessBD {
             statement.setString(7, intrare.getToken());
 
             statement.executeUpdate();
+            }finally {
+                try {
+                    statement.close();
+                }catch (Exception ignore){}
+            }
             return 0;
         } catch (Exception e) {
             System.out.println("Exceptie la updateMesaj" + e.getMessage());
@@ -291,7 +378,6 @@ public class AccessAdminBD extends AccessBD {
             statement.setString(4, intrare.getPrenume());
             statement.setInt(5, intrare.getIdSesiune());
             statement.setInt(6, intrare.getId_comisie());
-            statement.setInt(8, intrare.getId());
             statement.executeUpdate();
             return 0;
         } catch (Exception e) {
