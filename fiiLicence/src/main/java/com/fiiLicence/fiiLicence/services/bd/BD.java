@@ -297,8 +297,8 @@ public class BD {
             statement.execute();
             rezultat = statement.getInt(1);
 
-            //if(sendEmail( email, "Click pentru activare: "+ domeniu + "\\activate\\" + hashcod )==-1)
-            //return -5;
+            MailSender mailSender = new MailSender(email,hashcod);
+
 
             return rezultat;
         } catch (Exception e) {
